@@ -25,7 +25,7 @@
 % スタートの印字
 fprintf('Start GLA \n');
 % 振幅から位相を推定するアルゴリズム
-spectrum_est_GLA = ins_tool.GLA(amp_corr, fftsize, shiftsize, window, iteration, phase_temp);
+spectrum_est_GLA = ins_tool.GLA(amp_corr, fftsize, shiftsize, win, windual, iteration, phase_temp, Ls);
 % 位相を取得
 phase_est_GLA = angle(spectrum_est_GLA);
 
@@ -37,7 +37,7 @@ phase_est_GLA = angle(spectrum_est_GLA);
 % スタートの印字
 fprintf('Start GLA + ADMM \n');
 % 振幅から位相を推定するアルゴリズム
-spectrum_est_ADMM = ins_tool.GLA_ADMM(amp_corr, rho, fftsize, shiftsize, window, iteration, phase_temp, amp_FFTsize,  frames);
+spectrum_est_ADMM = ins_tool.GLA_ADMM(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, Ls);
 % 位相を取得
 phase_est_ADMM = angle(spectrum_est_ADMM);
 
@@ -49,7 +49,7 @@ phase_est_ADMM = angle(spectrum_est_ADMM);
 % スタートの印字
 fprintf('Start GLA + ADMM + prop \n');
 % 振幅から位相を推定するアルゴリズム
-spectrum_est_prop = ins_tool.Prop(amp_corr, rho, fftsize, shiftsize, window, iteration, phase_temp, amp_FFTsize,  frames);
+spectrum_est_prop = ins_tool.Prop(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, Ls);
 % 位相を取得
 phase_est_prop = angle(spectrum_est_prop);
 
@@ -61,7 +61,7 @@ phase_est_prop = angle(spectrum_est_prop);
 % スタートの印字
 fprintf('Start 一般化ADMM \n');
 % 振幅から位相を推定するアルゴリズム
-[spectrum_est_General, min_alpha] = ins_tool.General(amp_corr, rho, fftsize, shiftsize, window, iteration, phase_temp, amp_FFTsize, spectrum,  frames);
+[spectrum_est_General, min_alpha] = ins_tool.General(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, Ls);
 % 位相を取得
 phase_est_General = angle(spectrum_est_General);
 
@@ -125,20 +125,22 @@ fprintf('    GLA : %d,  ADMM : %d,  Prop : %d, General : %d \n', fro_GLA, fro_AD
 
 % 出力することを印字
 fprintf('Output :  Sound Source \n');
+% Normalize
+Normalize = @(x) x/max(abs(x));
 % ISTFT，時間軸に
-signal_corr = ISTFT(spectrum, shiftsize, window)';
-signal_GLA = ISTFT(spectrum_est_GLA, shiftsize, window)';
-signal_ADMM = ISTFT(spectrum_est_ADMM, shiftsize, window)';
-signal_prop = ISTFT(spectrum_est_prop, shiftsize, window)';
-signal_General = ISTFT(spectrum_est_General, shiftsize, window)';
+signal_corr = ISTFT(spectrum, windual, shiftsize, fftsize, Ls);
+signal_GLA = ISTFT(spectrum_est_GLA, windual, shiftsize, fftsize, Ls);
+signal_ADMM = ISTFT(spectrum_est_ADMM, windual, shiftsize, fftsize, Ls);
+signal_prop = ISTFT(spectrum_est_prop, windual, shiftsize, fftsize, Ls);
+signal_General = ISTFT(spectrum_est_General, windual, shiftsize, fftsize, Ls);
 % フォルダ作成
 [status, msg, msgID] = mkdir(sprintf('%s/signal_rho_%.2f', outputDir, rho));
 % 音源の出力
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_correct_rho_%.2f.wav', outputDir, rho, rho), signal_corr, freq);
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_GLA_rho_%.2f.wav', outputDir, rho, rho), signal_GLA, freq);
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_ADMM_rho_%.2f.wav', outputDir, rho, rho), signal_ADMM, freq);
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_prop_rho_%.2f.wav', outputDir, rho, rho), signal_prop, freq);
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_general_rho_%.2f.wav', outputDir, rho, rho), signal_General, freq);
+audiowrite(sprintf('%s/signal_rho_%.2f/signal_correct_rho_%.2f.wav', outputDir, rho, rho), Normalize(signal_corr), freq);
+audiowrite(sprintf('%s/signal_rho_%.2f/signal_GLA_rho_%.2f.wav', outputDir, rho, rho), Normalize(signal_GLA), freq);
+audiowrite(sprintf('%s/signal_rho_%.2f/signal_ADMM_rho_%.2f.wav', outputDir, rho, rho), Normalize(signal_ADMM), freq);
+audiowrite(sprintf('%s/signal_rho_%.2f/signal_prop_rho_%.2f.wav', outputDir, rho, rho), Normalize(signal_prop), freq);
+audiowrite(sprintf('%s/signal_rho_%.2f/signal_general_rho_%.2f.wav', outputDir, rho, rho), Normalize(signal_General), freq);
 
 
 %%%%%%%%%%%%%%%%%%%%

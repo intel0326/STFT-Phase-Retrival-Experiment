@@ -42,7 +42,7 @@ for rho = [0.01, 0.1, 0.2, 10, 20, 100]
     run('Experiment_clear_amp.m');
     save(sprintf('./Variable/result_rho_%.2f.mat', rho));
 end
-
+    
 %“ñ‚Â–Ú‚ÌŽÀŒ±‚ðŠJŽn
 %fprintf('**********Experiment noise amp**********\n');
 %run('Experiment_noise_amp.m');

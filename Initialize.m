@@ -20,7 +20,8 @@ shiftsize = 128;
 % ADMMのイテレーション回数を指定
 iteration = 1000;
 % 窓の種類
-window = 'hann';
+%window = 'hann';
+win = hann(fftsize,'periodic'); % ハニング窓
 % 対象音
 filename = './Sound_source/mixture.wav';
 % 出力先
@@ -34,9 +35,9 @@ sell_spe = 16;
 % 前処理
 %%%%%%%%%%%%%%%%%%%%
 
-% 1.音源の読み込み
+% 1.ISTFTに利用する逆の窓を合成
 % 2.真の複素スペクトログラムを取得
-[music, spectrum] = ins_tool.AudioReadMethod(filename, total_sec, freq, fftsize, shiftsize, window);
+[windual, spectrum, Ls] = ins_tool.AudioReadMethod(filename, total_sec, freq, fftsize, shiftsize, win);
 
 % 所望の振幅と位相を取得
 amp_corr = abs(spectrum);
