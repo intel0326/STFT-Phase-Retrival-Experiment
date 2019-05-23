@@ -16,7 +16,7 @@ total_sec = 10;
 % 短時間フーリエ変換のフレームフレーム幅
 fftsize = 1024;
 % 短時間フーリエ変換のフレームシフト量
-shiftsize = 128;
+shiftsize = 256;
 % ADMMのイテレーション回数を指定
 iteration = 1000;
 % 窓の種類

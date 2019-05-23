@@ -21,9 +21,10 @@ function C = STFT(sig,win,skip,winLen,Ls)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-sigLC = circshift(sig,winLen/2);
 idx = (1:winLen)' + (0:skip:Ls-winLen);
-C = fft(ifftshift(sigLC(idx).*win,1));
+size(idx);
+C = fft(sig(idx).*win);
 hWL = floor(winLen/2);
-C = C(1:hWL+1,:).*exp(-2i*pi*(mod((0:hWL)'*(0:size(C,2)-1)*skip,winLen)/winLen));
+%C = C(1:hWL+1,:); % í èÌÇÃSTFT
+C = C(1:hWL+1,:).*exp(-2i*pi*(mod((0:hWL)'*(0:size(C,2)-1)*skip,winLen)/winLen)); % óùò_ìIÇ…çDÇ‹ÇµÇ¢STFT
 end
