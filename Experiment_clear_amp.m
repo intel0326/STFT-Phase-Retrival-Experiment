@@ -153,12 +153,14 @@ audiowrite(sprintf('%s/signal_rho_%.2f/signal_ADMM_rho=%.2f_q=%d.wav', outputDir
 A = {rho, err_ADMM};
 xlRange = sprintf('B%d', sell_angle);
 %xlswrite(sprintf('%s/result.xlsx', outputDir), A, 1, xlRange);
+%xlRange = sprintf('%s%d', col_exl, sell_angle);
 xlswrite(sprintf('%s/result.xlsx', outputDir), A, q, xlRange);
 
 %A = {rho, fro_GLA, fro_ADMM, fro_prop, fro_General, min_alpha};
 A = {rho, fro_ADMM};
 xlRange = sprintf('B%d', sell_spe);
 %xlswrite(sprintf('%s/result.xlsx', outputDir), A, 1, xlRange);
+%xlRange = sprintf('%s%d', col_exl, sell_spe);
 xlswrite(sprintf('%s/result.xlsx', outputDir), A, q, xlRange);
 
 %sell_angle = sell_angle + 1;

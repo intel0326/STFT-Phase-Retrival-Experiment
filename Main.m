@@ -75,6 +75,9 @@ for rho = [0.1, 10]
     
     count = count + 1;
     
+    sell_angle = sell_angle + 1;
+    sell_spe = sell_spe + 1;
+    
 end
     
 %“ñ‚Â–Ú‚ÌŽÀŒ±‚ðŠJŽn
