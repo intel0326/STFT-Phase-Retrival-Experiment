@@ -79,6 +79,18 @@ phase_est_Douglas= angle(spectrum_est_Douglas);
 
 
 %%%%%%%%%%%%%%%%%%%%
+% SDMM
+%%%%%%%%%%%%%%%%%%%%
+
+% スタートの印字
+fprintf('Start SDMM \n');
+% 振幅から位相を推定するアルゴリズム
+[spectrum_est_SDMM, min_alpha_SDMM] = ins_tool.SDMM(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, Ls, signal_len);
+% 位相を取得
+phase_est_SDMM= angle(spectrum_est_SDMM);
+
+
+%%%%%%%%%%%%%%%%%%%%
 % 評価
 %%%%%%%%%%%%%%%%%%%%
 
@@ -96,6 +108,7 @@ spectrum_amp1_ADMM = ones( size(amp_corr) ) .* exp( 1i * phase_est_ADMM );
 spectrum_amp1_prop = ones( size(amp_corr) ) .* exp( 1i * phase_est_prop );
 spectrum_amp1_General = ones( size(amp_corr) ) .* exp( 1i * phase_est_General );
 spectrum_amp1_Douglas = ones( size(amp_corr) ) .* exp( 1i * phase_est_Douglas );
+spectrum_amp1_SDMM = ones( size(amp_corr) ) .* exp( 1i * phase_est_SDMM );
 
 %      二乗平均誤差
 err_GLA = immse(spectrum_amp1_corr, spectrum_amp1_GLA);
@@ -103,9 +116,10 @@ err_ADMM = immse(spectrum_amp1_corr, spectrum_amp1_ADMM);
 err_prop = immse(spectrum_amp1_corr, spectrum_amp1_prop);
 err_General = immse(spectrum_amp1_corr, spectrum_amp1_General);
 err_Douglas = immse(spectrum_amp1_corr, spectrum_amp1_Douglas);
+err_SDMM= immse(spectrum_amp1_corr, spectrum_amp1_SDMM);
 
 %      二乗平均誤差の結果を印字
-fprintf('    GLA : %d,  ADMM : %d,  Prop : %d, General : %d, err_Douglas : %d\n', err_GLA, err_ADMM, err_prop, err_General, err_Douglas);
+fprintf('    GLA : %d,  ADMM : %d,  Prop : %d, General : %d, Douglas : %d, SDMM : %d\n', err_GLA, err_ADMM, err_prop, err_General, err_Douglas, err_SDMM);
 
 
 % 理想的な振幅と推定した位相の複素数で平均によって評価
@@ -116,9 +130,10 @@ fro_ADMM = norm(spectrum - spectrum_est_ADMM,'fro');
 fro_prop = norm(spectrum - spectrum_est_prop,'fro');
 fro_General = norm(spectrum - spectrum_est_General,'fro');
 fro_Douglas = norm(spectrum - spectrum_est_Douglas,'fro');
+fro_SDMM = norm(spectrum - spectrum_est_SDMM,'fro');
 
 % 結果を印字
-fprintf('    GLA : %d,  ADMM : %d,  Prop : %d, General : %d, Douglas : %d \n', fro_GLA, fro_ADMM, fro_prop, fro_General, fro_Douglas);
+fprintf('    GLA : %d,  ADMM : %d,  Prop : %d, General : %d, Douglas : %d, SDMM : %d \n', fro_GLA, fro_ADMM, fro_prop, fro_General, fro_Douglas, fro_SDMM);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -136,6 +151,7 @@ signal_ADMM = ISTFT(spectrum_est_ADMM, windual, shiftsize, fftsize, Ls);
 signal_prop = ISTFT(spectrum_est_prop, windual, shiftsize, fftsize, Ls);
 signal_General = ISTFT(spectrum_est_General, windual, shiftsize, fftsize, Ls);
 signal_Douglas = ISTFT(spectrum_est_Douglas, windual, shiftsize, fftsize, Ls);
+signal_SDMM = ISTFT(spectrum_est_Douglas, windual, shiftsize, fftsize, Ls);
 
 % フォルダ作成
 [status, msg, msgID] = mkdir(sprintf('%s/signal_rho_%.2f', outputDir, rho));
@@ -146,6 +162,7 @@ audiowrite(sprintf('%s/signal_rho_%.2f/signal_ADMM_rho=%.2f.wav', outputDir, rho
 audiowrite(sprintf('%s/signal_rho_%.2f/signal_prop_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_prop), freq);
 audiowrite(sprintf('%s/signal_rho_%.2f/signal_general_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_General), freq);
 audiowrite(sprintf('%s/signal_rho_%.2f/signal_Douglas_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_Douglas), freq);
+audiowrite(sprintf('%s/signal_rho_%.2f/signal_SDMM_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_SDMM), freq);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -154,11 +171,11 @@ audiowrite(sprintf('%s/signal_rho_%.2f/signal_Douglas_rho=%.2f.wav', outputDir, 
 
 %edit( sprintf('%s/result.xlsx', outputDir) );
 
-A = {rho, err_GLA, err_ADMM, err_prop, err_General, err_Douglas, min_alpha_general, min_alpha_Douglas};
+A = {rho, err_GLA, err_ADMM, err_prop, err_General, err_Douglas, err_SDMM, min_alpha_general, min_alpha_Douglas, min_alpha_SDMM};
 xlRange = sprintf('B%d', sell_angle);
 xlswrite(sprintf('%s/result.xlsx', outputDir), A, 1, xlRange);
 
-A = {rho, fro_GLA, fro_ADMM, fro_prop, fro_General, fro_Douglas, min_alpha_general, min_alpha_Douglas};
+A = {rho, fro_GLA, fro_ADMM, fro_prop, fro_General, fro_Douglas, fro_SDMM, min_alpha_general, min_alpha_Douglas, min_alpha_SDMM};
 xlRange = sprintf('B%d', sell_spe);
 xlswrite(sprintf('%s/result.xlsx', outputDir), A, 1, xlRange);
 

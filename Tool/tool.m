@@ -332,5 +332,90 @@ classdef tool
             
         end
         
+        function [spectrum, min_alpha] = SDMM(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, freq, spectrum_corr, frames, Ls, signal_len)
+            %
+            % Corded by R.Nakatsu (is0269rx@ed.ritsumei.ac.jp) on 24 May. 2019.
+            %
+            % [inputs]
+            %   amp_corr: correct amplitude ( FrequencyBin * Frames)
+            %   rho: ADMM Parameter ( ρ = 0.1, 0.2, 10, 100)
+            %   fftsize: FFT length (=8192)
+            %   shiftsize: frame shift (default: fftSize/2)
+            %   window: window function used in STFT (fftSize x 1) or choose used
+            %   iteration: iteration number
+            %   phase_temp: Random phase used as initial value
+            %   spectrum_corr: correct spectrum
+            %   freq: fft length/2 (8192/2)
+            %
+            % [outputs]
+            %   spectrum: frequency-domain (fftSize/2+1 x frames)
+            %
+                
+            % 100.1 + 100.1i の複素数を用意
+            %  min_x = 0 : alpha更新に伴ってスペクトル距離最小となるスペクトルを得る
+            temp_comp = complex(double(100.1), double(100.1));
+            min_x = repmat(temp_comp, freq, frames);         
+            
+            % alphaの更新
+            %for alpha = 0.05:0.05:0.95
+            for alpha = [0.2, 0.4, 0.5, 0.6, 0.8]
+
+                % 初期値
+                %       x = amp_corr .* exp(1i * phase_temp) : 所望の振幅とランダムな位相によるスペクトル
+                %       y1, y2 =  x: SDMMで解く最適化問題に落とし込むため，変数y1,y2を用意
+                x = amp_corr .* exp(1i * phase_temp);
+                y1 = x;
+                y2 = x;
+                z1 = zeros(freq, frames);
+                z2 = zeros(freq, frames);
+                
+                %%%%%%%%%%%%%%%%%%%%
+                % SDMM
+                %%%%%%%%%%%%%%%%%%%%
+                
+                for i = 1:iteration
+                     
+                    % xを更新
+                    x = ( ( y1 - z1 ) + ( y2 - z2 ) ) / 2;
+                    
+                    %y1を更新
+                    %   理想的な振幅Aの集合へ写像することにより振幅を修正
+                    y1 = ( ( rho*amp_corr + ( 1 - alpha )*abs(x+z1) ) / ( 1 - alpha + rho ) ) .* exp( 1i * angle(x+z1) );
+                    
+                    %y2を更新
+                    %   下準備として STFT( ISTFT() )をおこなう
+                    S1 = ISTFT(x+z2, windual, shiftsize, fftsize, Ls);
+                    S2 = STFT(S1, win, shiftsize, fftsize, Ls, signal_len);
+                    %   スペクトログラムの値域集合への写像により位相を修正
+                    y2 = ( alpha*(x+z2) + rho*S2 ) / ( alpha + rho );
+                    
+                    % z1,z2の更新
+                    z1 = z1 + x - y1;
+                    z2 = z2 + x - y2;
+                                   
+                end
+                
+                % 正解スペクトルとの差をみる
+                temp_err_x = norm(spectrum_corr - x, 'fro');
+                
+                % 距離の印字
+                %fprintf('    distance : %d \n', temp_err_x);
+                
+                % 差が小さければ更新
+                if norm(spectrum_corr - min_x, 'fro') > temp_err_x
+                    min_x = x;
+                    min_alpha = alpha;
+                    min_err_x = temp_err_x;
+                end
+                    
+            end
+            
+            spectrum = min_x;
+            
+            % 印字
+            fprintf('  min distance : %d ,   min alpha : %d \n', min_err_x, min_alpha);
+            
+        end
+        
     end
 end
