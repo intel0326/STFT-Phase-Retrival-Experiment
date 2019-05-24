@@ -1,4 +1,4 @@
-function C = STFT(sig,win,skip,winLen,Ls)
+function C = STFT(sig,win,skip,winLen,Ls,signal_len)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 %                                  STFT
@@ -9,6 +9,7 @@ function C = STFT(sig,win,skip,winLen,Ls)
 % skip  : skipping samples (1 x 1)
 % winLen: window length (1 x 1)
 % Ls    : signal length (1 x 1)
+% signal_len : Original signal length (1 x 1)
 %
 % !! Attention !!
 % length(sig) = Ls = win + skip x N
@@ -20,6 +21,10 @@ function C = STFT(sig,win,skip,winLen,Ls)
 %
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% zero パディング：信号の両端を0詰め
+sig = [zeros(winLen-skip,1);sig; ...
+    zeros(Ls-signal_len-2*(winLen-skip),1);zeros(winLen-skip,1) ];
 
 idx = (1:winLen)' + (0:skip:Ls-winLen);
 size(idx);

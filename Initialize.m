@@ -36,7 +36,7 @@ sell_spe = 16;
 
 % 1.ISTFTに利用する逆の窓を合成
 % 2.真の複素スペクトログラムを取得
-[windual, spectrum, Ls] = ins_tool.AudioReadMethod(filename, total_sec, freq, fftsize, shiftsize, win);
+[windual, spectrum, Ls, signal_len] = ins_tool.AudioReadMethod(filename, total_sec, freq, fftsize, shiftsize, win);
 
 % 所望の振幅と位相を取得
 amp_corr = abs(spectrum);
@@ -49,7 +49,7 @@ phase_corr = angle(spectrum);
 % 位相の行列サイズを取得
 [amp_FFTsize, frames] = size(amp_corr);
 % ランダムな位相を取得
-phase_temp = rand(amp_FFTsize, frames);
+phase_temp = zeros(amp_FFTsize, frames);
 
 
 save('./Variable/Initialize')

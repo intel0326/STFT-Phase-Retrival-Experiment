@@ -25,7 +25,7 @@
 % スタートの印字
 fprintf('Start GLA \n');
 % 振幅から位相を推定するアルゴリズム
-spectrum_est_GLA = ins_tool.GLA(amp_corr, fftsize, shiftsize, win, windual, iteration, phase_temp, Ls);
+spectrum_est_GLA = ins_tool.GLA(amp_corr, fftsize, shiftsize, win, windual, iteration, phase_temp, Ls, signal_len);
 % 位相を取得
 phase_est_GLA = angle(spectrum_est_GLA);
 
@@ -37,7 +37,7 @@ phase_est_GLA = angle(spectrum_est_GLA);
 % スタートの印字
 fprintf('Start GLA + ADMM \n');
 % 振幅から位相を推定するアルゴリズム
-spectrum_est_ADMM = ins_tool.GLA_ADMM(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, Ls);
+spectrum_est_ADMM = ins_tool.GLA_ADMM(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, Ls, signal_len);
 % 位相を取得
 phase_est_ADMM = angle(spectrum_est_ADMM);
 
@@ -49,7 +49,7 @@ phase_est_ADMM = angle(spectrum_est_ADMM);
 % スタートの印字
 fprintf('Start GLA + ADMM + prop \n');
 % 振幅から位相を推定するアルゴリズム
-spectrum_est_prop = ins_tool.Prop(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, Ls);
+spectrum_est_prop = ins_tool.Prop(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, Ls, signal_len);
 % 位相を取得
 phase_est_prop = angle(spectrum_est_prop);
 
@@ -61,7 +61,7 @@ phase_est_prop = angle(spectrum_est_prop);
 % スタートの印字
 fprintf('Start 一般化ADMM \n');
 % 振幅から位相を推定するアルゴリズム
-[spectrum_est_General, min_alpha] = ins_tool.General(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, Ls);
+[spectrum_est_General, min_alpha] = ins_tool.General(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, Ls, signal_len);
 % 位相を取得
 phase_est_General = angle(spectrum_est_General);
 
