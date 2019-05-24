@@ -18,13 +18,15 @@ fftsize = 1024;
 % 短時間フーリエ変換のフレームシフト量
 shiftsize = 256;
 % ADMMのイテレーション回数を指定
-iteration = 2;
+iteration = 1000;
 % 窓の種類
 win = hann(fftsize,'periodic'); % ハニング窓
 % 対象音
 filename = './Sound_source/mixture.wav';
 % 出力先
 outputDir = './Output';
+% Douglas-Rachford Splitting Algorithm のγの値
+gamma = 1.9;
 % エクセルシートの初期値
 sell_angle = 3;
 sell_spe = 16;
