@@ -1,6 +1,6 @@
 classdef tool
     methods (Static)
-        function [music, Spe] = AudioReadMethod(filename, total_sec, freq, fftsize, shiftsize, window)
+        function [windual, Spe, Ls, signal_len] = AudioReadMethod(filename, total_sec, freq, fftsize, shiftsize, win)
             %サンプリングレートのみ取得
             %いらない音源の部分は「~」で消しておく
             [~,fs] = audioread(filename);
@@ -10,17 +10,19 @@ classdef tool
             [music, fs] = audioread(filename, samples);
             %ダウンサンプリング
             music = resample(music, freq, fs);
-            %FFTと読み込む長さを調節
-            %floor( (10秒*16000 - 8192 + 2048) / 2048 )
-            temp_len = floor( (total_sec*freq - fftsize + shiftsize) / shiftsize );
-            length = temp_len*shiftsize + fftsize;
-            %音源をFFT用にカット
-            music = music(1:length);
-            %音源信号にショートタイムフーリエ変換をかける。（真の複素スペクトログラム)
-            [Spe,~] = STFT(music', fftsize, shiftsize, window);
+            %ステレオをモノラル化
+            music=mean(music, 2);
+            %musicの長さを取得，後にSTFTで使用
+            signal_len=length(music);
+            %逆の窓を合成
+            windual = winDual(win, shiftsize);
+            % !! Ls must be even number due to our STFT/iSTFT implementation !!
+            Ls = ceil((signal_len+2*(fftsize-shiftsize)-fftsize)/shiftsize)*shiftsize+fftsize;
+            % STFT(0パディングもSTFT.m内で行う)
+            Spe = STFT(music, win, shiftsize, fftsize, Ls, signal_len);
         end
         
-        function spectrum = GLA(amp_corr, fftsize, shiftsize, window, iteration, phase_temp)
+        function spectrum = GLA(amp_corr, fftsize, shiftsize, win, windual, iteration, phase_temp, Ls, signal_len)
             %
             % Corded by R.Nakatsu (is0269rx@ed.ritsumei.ac.jp) on 18 Apr. 2019.
             %
@@ -50,8 +52,8 @@ classdef tool
                 %fprintf('    Iteration : %d \n', i);
                 
                 % 位相を更新
-                S1 = ISTFT(x, shiftsize, window);
-                [S2,~] = STFT(S1, fftsize, shiftsize, window );
+                S1 = ISTFT(x, windual, shiftsize, fftsize, Ls);
+                S2 = STFT(S1, win, shiftsize, fftsize, Ls, signal_len);
                 
                 % スペクトログラムの更新，ampは所望に変更，位相だけ保管
                 % アダマール積に注意
@@ -63,7 +65,7 @@ classdef tool
             
         end
         
-        function spectrum = GLA_ADMM(amp_corr, rho, fftsize, shiftsize, window, iteration, phase_temp, freq,  frames)
+        function spectrum = GLA_ADMM(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, freq, frames, Ls, signal_len)
             %
             % Corded by R.Nakatsu (is0269rx@ed.ritsumei.ac.jp) on 16 Apr. 2019.
             %
@@ -104,8 +106,8 @@ classdef tool
                 
                 % 新たな変数であるzを更新
                 %   下準備として STFT( ISTFT() )をおこなう
-                S1 = ISTFT(x + u, shiftsize, window);
-                [S2,~] = STFT(S1, fftsize, shiftsize, window );
+                S1 = ISTFT(x+u, windual, shiftsize, fftsize, Ls);
+                S2 = STFT(S1, win, shiftsize, fftsize, Ls, signal_len);
                 %   zの更新
                 z = ( rho*S2 + x + u ) / (1 + rho);
                 
@@ -118,7 +120,7 @@ classdef tool
             
         end
         
-        function spectrum = Prop(amp_corr, rho, fftsize, shiftsize, window, iteration, phase_temp, freq,  frames)
+        function spectrum = Prop(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, freq, frames, Ls, signal_len)
             %
             % Corded by R.Nakatsu (is0269rx@ed.ritsumei.ac.jp) on 11 May. 2019.
             %
@@ -155,8 +157,8 @@ classdef tool
                 
                 % xの更新
                 %   STFT( ISTFT() )をおこなう
-                S1 = ISTFT(z - u, shiftsize, window);
-                [x,~] = STFT(S1, fftsize, shiftsize, window );
+                S1 = ISTFT(z-u, windual, shiftsize, fftsize, Ls);
+                x = STFT(S1, win, shiftsize, fftsize, Ls, signal_len);
                 
                 % 新たな変数であるzを更新
                 %   アダマール積に注意
@@ -171,7 +173,7 @@ classdef tool
             
         end
         
-        function [spectrum, min_alpha] = General(amp_corr, rho, fftsize, shiftsize, window, iteration, phase_temp, freq, spectrum_corr,  frames)
+        function [spectrum, min_alpha] = General(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, freq, spectrum_corr, frames, Ls, signal_len)
             %
             % Corded by R.Nakatsu (is0269rx@ed.ritsumei.ac.jp) on 13 May. 2019.
             %
@@ -197,9 +199,8 @@ classdef tool
             
             
             % alphaの更新
-            %       0.1ずつインクリメントしながらalphaの値を更新
             %for alpha = 0.05:0.05:0.95
-            for alpha = 0.05:0.05:0.95
+            for alpha = [0.2, 0.4, 0.5, 0.6, 0.8]
                 
                 % alphaの更新回数の印字
                 %fprintf('    alpha : %d \n', alpha);
@@ -225,14 +226,88 @@ classdef tool
                     
                     % 新たな変数であるzを更新
                     %   下準備として STFT( ISTFT() )をおこなう
-                    S1 = ISTFT(x + u, shiftsize, window);
-                    [S2,~] = STFT(S1, fftsize, shiftsize, window );
+                    S1 = ISTFT(x+u, windual, shiftsize, fftsize, Ls);
+                    S2 = STFT(S1, win, shiftsize, fftsize, Ls, signal_len);
                     %   zの更新
                     z = ( alpha*(x + u) + rho*S2 ) / ( alpha + rho );
                     
                     % ラグランジュ未定乗数uの更新
                     u = u + x - z;
                     
+                end
+                
+                % 正解スペクトルとの差をみる
+                temp_err_x = norm(spectrum_corr - x, 'fro');
+                
+                % 距離の印字
+                %fprintf('    distance : %d \n', temp_err_x);
+                
+                % 差が小さければ更新
+                if norm(spectrum_corr - min_x, 'fro') > temp_err_x
+                    min_x = x;
+                    min_alpha = alpha;
+                    min_err_x = temp_err_x;
+                end
+                    
+            end
+            
+            spectrum = min_x;
+            
+            % 印字
+            fprintf('  min distance : %d ,   min alpha : %d \n', min_err_x, min_alpha);
+            
+        end
+        
+        function [spectrum, min_alpha] = DouglasRachfordSplitting(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, freq, spectrum_corr, frames, Ls, signal_len, gamma)
+            %
+            % Corded by R.Nakatsu (is0269rx@ed.ritsumei.ac.jp) on 24 May. 2019.
+            %
+            % [inputs]
+            %   amp_corr: correct amplitude ( FrequencyBin * Frames)
+            %   rho: ADMM Parameter ( ρ = 0.1, 0.2, 10, 100)
+            %   fftsize: FFT length (=8192)
+            %   shiftsize: frame shift (default: fftSize/2)
+            %   window: window function used in STFT (fftSize x 1) or choose used
+            %   iteration: iteration number
+            %   phase_temp: Random phase used as initial value
+            %   spectrum_corr: correct spectrum
+            %   freq: fft length/2 (8192/2)
+            %
+            % [outputs]
+            %   spectrum: frequency-domain (fftSize/2+1 x frames)
+            %
+                
+            % 100.1 + 100.1i の複素数を用意
+            %  min_x = 0 : alpha更新に伴ってスペクトル距離最小となるスペクトルを得る
+            temp_comp = complex(double(100.1), double(100.1));
+            min_x = repmat(temp_comp, freq, frames);         
+            
+            % alphaの更新
+            %for alpha = 0.05:0.05:0.95
+            for alpha = [0.2, 0.4, 0.5, 0.6, 0.8]
+
+                % 初期値
+                %       x = amp_corr .* exp(1i * phase_temp) : 所望の振幅とランダムな位相によるスペクトル
+                %       s =  x: Douglas-Rachford Splitting Algorithmで解く最適化問題に落とし込むため，変数sを用意
+                x = amp_corr .* exp(1i * phase_temp);
+                s = x;
+                
+                %%%%%%%%%%%%%%%%%%%%
+                % Douglas-Rachford Splitting Algorithm
+                %%%%%%%%%%%%%%%%%%%%
+                
+                for i = 1:iteration
+                     
+                    % xを更新(アダマール積に注意)
+                    x = ( ( rho*amp_corr + ( 1 - alpha )*abs(s) ) / ( 1 - alpha + rho ) ) .* exp( 1i * angle(s) );
+                    
+                    % sを更新
+                    %   下準備として STFT( ISTFT() )をおこなう
+                    S1 = ISTFT(2*x-s, windual, shiftsize, fftsize, Ls);
+                    S2 = STFT(S1, win, shiftsize, fftsize, Ls, signal_len);
+                    %   sの更新
+                    s = s + gamma * ( ( alpha*(2*x-s) + rho*S2 ) / ( alpha + rho ) - x );
+                                   
                 end
                 
                 % 正解スペクトルとの差をみる

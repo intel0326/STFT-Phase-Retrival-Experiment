@@ -16,15 +16,17 @@ total_sec = 10;
 % 短時間フーリエ変換のフレームフレーム幅
 fftsize = 1024;
 % 短時間フーリエ変換のフレームシフト量
-shiftsize = 128;
+shiftsize = 256;
 % ADMMのイテレーション回数を指定
 iteration = 1000;
 % 窓の種類
-window = 'hann';
+win = hann(fftsize,'periodic'); % ハニング窓
 % 対象音
 filename = './Sound_source/mixture.wav';
 % 出力先
 outputDir = './Output';
+% Douglas-Rachford Splitting Algorithm のγの値
+gamma = 1.9;
 % エクセルシートの初期値
 sell_angle = 3;
 sell_spe = 16;
@@ -34,9 +36,9 @@ sell_spe = 16;
 % 前処理
 %%%%%%%%%%%%%%%%%%%%
 
-% 1.音源の読み込み
+% 1.ISTFTに利用する逆の窓を合成
 % 2.真の複素スペクトログラムを取得
-[music, spectrum] = ins_tool.AudioReadMethod(filename, total_sec, freq, fftsize, shiftsize, window);
+[windual, spectrum, Ls, signal_len] = ins_tool.AudioReadMethod(filename, total_sec, freq, fftsize, shiftsize, win);
 
 % 所望の振幅と位相を取得
 amp_corr = abs(spectrum);
@@ -49,7 +51,7 @@ phase_corr = angle(spectrum);
 % 位相の行列サイズを取得
 [amp_FFTsize, frames] = size(amp_corr);
 % ランダムな位相を取得
-phase_temp = rand(amp_FFTsize, frames);
+phase_temp = zeros(amp_FFTsize, frames);
 
 
 save('./Variable/Initialize')
