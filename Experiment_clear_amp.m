@@ -81,13 +81,11 @@ spectrum_amp1_GLA = ones( size(amp_corr) ) .* exp( 1i * phase_est_GLA );
 %      “ñæ•½‹ÏŒë·
 err_GLA = immse(spectrum_amp1_corr, spectrum_amp1_GLA);
 
-
 % Š–]‚ÌˆÊ‘Š‚ÆCADMM‚ÉŠî‚Ã‚«„’è‚µ‚½ˆÊ‘ŠŠÔ‚ÅU•1‚Ì•¡‘f”‚ğ‰¼’èC“ñæ•½‹ÏŒë·
 %      ADMM‚ÉŠî‚Ã‚«„’è‚µ‚½ˆÊ‘Š‚ÆU•1‚É‚æ‚è•¡‘f”‚ğ‰¼’è
 spectrum_amp1_ADMM = ones( size(amp_corr) ) .* exp( 1i * phase_est_ADMM );
 %      “ñæ•½‹ÏŒë·
 err_ADMM = immse(spectrum_amp1_corr, spectrum_amp1_ADMM);
-
 
 % Š–]‚ÌˆÊ‘Š‚ÆCProp‚ÉŠî‚Ã‚«„’è‚µ‚½ˆÊ‘ŠŠÔ‚ÅU•1‚Ì•¡‘f”‚ğ‰¼’èC“ñæ•½‹ÏŒë·
 %      Prop‚ÉŠî‚Ã‚«„’è‚µ‚½ˆÊ‘Š‚ÆU•1‚É‚æ‚è•¡‘f”‚ğ‰¼’è
@@ -104,7 +102,6 @@ err_General = immse(spectrum_amp1_corr, spectrum_amp1_General);
 
 % 2æ•½‹ÏŒë·‚ÌŒ‹‰Ê‚ğˆóš
 fprintf('    GLA : %d,  ADMM : %d,  Prop : %d, General : %d \n', err_GLA, err_ADMM, err_prop, err_General);
-
 
 % —‘z“I‚ÈU•‚Æ„’è‚µ‚½ˆÊ‘Š‚Ì•¡‘f”‚Å•½‹Ï‚É‚æ‚Á‚Ä•]‰¿
 fprintf('Result :  frobenius norm \n');
@@ -136,11 +133,11 @@ signal_General = ISTFT(spectrum_est_General, windual, shiftsize, fftsize, Ls);
 % ƒtƒHƒ‹ƒ_ì¬
 [status, msg, msgID] = mkdir(sprintf('%s/signal_rho_%.2f', outputDir, rho));
 % ‰¹Œ¹‚Ìo—Í
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_correct_rho_%.2f.wav', outputDir, rho, rho), Normalize(signal_corr), freq);
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_GLA_rho_%.2f.wav', outputDir, rho, rho), Normalize(signal_GLA), freq);
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_ADMM_rho_%.2f.wav', outputDir, rho, rho), Normalize(signal_ADMM), freq);
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_prop_rho_%.2f.wav', outputDir, rho, rho), Normalize(signal_prop), freq);
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_general_rho_%.2f.wav', outputDir, rho, rho), Normalize(signal_General), freq);
+audiowrite(sprintf('%s/signal_rho_%.2f/signal_correct_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_corr), freq);
+audiowrite(sprintf('%s/signal_rho_%.2f/signal_GLA_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_GLA), freq);
+audiowrite(sprintf('%s/signal_rho_%.2f/signal_ADMM_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_ADMM), freq);
+audiowrite(sprintf('%s/signal_rho_%.2f/signal_prop_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_prop), freq);
+audiowrite(sprintf('%s/signal_rho_%.2f/signal_general_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_General), freq);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -159,6 +156,5 @@ xlswrite(sprintf('%s/result.xlsx', outputDir), A, 1, xlRange);
 
 sell_angle = sell_angle + 1;
 sell_spe = sell_spe + 1;
-
 
 

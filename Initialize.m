@@ -16,11 +16,10 @@ total_sec = 10;
 % 短時間フーリエ変換のフレームフレーム幅
 fftsize = 1024;
 % 短時間フーリエ変換のフレームシフト量
-shiftsize = 128;
+shiftsize = 256;
 % ADMMのイテレーション回数を指定
-iteration = 1000;
+iteration = 2;
 % 窓の種類
-%window = 'hann';
 win = hann(fftsize,'periodic'); % ハニング窓
 % 対象音
 filename = './Sound_source/mixture.wav';

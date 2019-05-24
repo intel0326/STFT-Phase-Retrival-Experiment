@@ -15,6 +15,7 @@ close all;
 %
 %   実行方法
 %       コマンドウィンドウ内に「Main」で実行
+%       
 %
 %   初期値
 %       Initialize.mにて初期値を設定し，./Variable/Initialize.matにて保存
@@ -36,9 +37,11 @@ fprintf('**********Experiment clear amp**********\n');
 % admmのパラメータρ ( ρ = 0.1, 0.2, 10, 100)
 %for rho = 0.1:0.1:1.0
 for rho = [0.01, 0.1, 0.2, 10, 20, 100]
+
     fprintf('\n');
     fprintf('rho = %d \n', rho);
     fprintf('\n');
+        
     run('Experiment_clear_amp.m');
     save(sprintf('./Variable/result_rho_%.2f.mat', rho));
 end

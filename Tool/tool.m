@@ -10,12 +10,15 @@ classdef tool
             [music, fs] = audioread(filename, samples);
             %ダウンサンプリング
             music = resample(music, freq, fs);
+            %ステレオをモノラル化
+            music=mean(music, 2);
             %逆の窓を合成
             windual = winDual(win, shiftsize);
             % !! Ls must be even number due to our STFT/iSTFT implementation !!
             Ls = ceil((length(music)+2*(fftsize-shiftsize)-fftsize)/shiftsize)*shiftsize+fftsize;
             % zero パディング：信号の両端を0詰め
-            music = [ zeros(fftsize-shiftsize,1); music; zeros(Ls-length(music)-2*(fftsize-shiftsize),1); zeros(fftsize-shiftsize,1) ];
+            music = [zeros(fftsize-shiftsize,1);music; ...
+                zeros(Ls-length(music)-2*(fftsize-shiftsize),1);zeros(fftsize-shiftsize,1) ];
             % STFT
             Spe = STFT(music, win, shiftsize, fftsize, Ls);
         end
