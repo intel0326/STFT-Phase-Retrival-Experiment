@@ -84,10 +84,20 @@ phase_est_Douglas= angle(spectrum_est_Douglas);
 
 % スタートの印字
 fprintf('Start SDMM \n');
-% 振幅から位相を推定するアルゴリズム
 [spectrum_est_SDMM, min_alpha_SDMM] = ins_tool.SDMM(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, Ls, signal_len);
 % 位相を取得
 phase_est_SDMM= angle(spectrum_est_SDMM);
+
+
+%%%%%%%%%%%%%%%%%%%%
+% PPXA
+%%%%%%%%%%%%%%%%%%%%
+
+% スタートの印字
+fprintf('Start PPXA \n');
+[spectrum_est_PPXA, min_alpha_PPXA] = ins_tool.PPXA(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, Ls, signal_len, gamma);
+% 位相を取得
+phase_est_PPXA= angle(spectrum_est_PPXA);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -109,6 +119,7 @@ spectrum_amp1_prop = ones( size(amp_corr) ) .* exp( 1i * phase_est_prop );
 spectrum_amp1_General = ones( size(amp_corr) ) .* exp( 1i * phase_est_General );
 spectrum_amp1_Douglas = ones( size(amp_corr) ) .* exp( 1i * phase_est_Douglas );
 spectrum_amp1_SDMM = ones( size(amp_corr) ) .* exp( 1i * phase_est_SDMM );
+spectrum_amp1_PPXA = ones( size(amp_corr) ) .* exp( 1i * phase_est_PPXA );
 
 %      二乗平均誤差
 err_GLA = immse(spectrum_amp1_corr, spectrum_amp1_GLA);
@@ -117,9 +128,10 @@ err_prop = immse(spectrum_amp1_corr, spectrum_amp1_prop);
 err_General = immse(spectrum_amp1_corr, spectrum_amp1_General);
 err_Douglas = immse(spectrum_amp1_corr, spectrum_amp1_Douglas);
 err_SDMM= immse(spectrum_amp1_corr, spectrum_amp1_SDMM);
+err_PPXA= immse(spectrum_amp1_corr, spectrum_amp1_PPXA);
 
 %      二乗平均誤差の結果を印字
-fprintf('    GLA : %d,  ADMM : %d,  Prop : %d, General : %d, Douglas : %d, SDMM : %d\n', err_GLA, err_ADMM, err_prop, err_General, err_Douglas, err_SDMM);
+fprintf('    GLA : %d,  ADMM : %d,  Prop : %d, General : %d, Douglas : %d, SDMM : %d, PPXA : %d \n', err_GLA, err_ADMM, err_prop, err_General, err_Douglas, err_SDMM, err_PPXA);
 
 
 % 理想的な振幅と推定した位相の複素数で平均によって評価
@@ -131,9 +143,10 @@ fro_prop = norm(spectrum - spectrum_est_prop,'fro');
 fro_General = norm(spectrum - spectrum_est_General,'fro');
 fro_Douglas = norm(spectrum - spectrum_est_Douglas,'fro');
 fro_SDMM = norm(spectrum - spectrum_est_SDMM,'fro');
+fro_PPXA = norm(spectrum - spectrum_est_PPXA,'fro');
 
 % 結果を印字
-fprintf('    GLA : %d,  ADMM : %d,  Prop : %d, General : %d, Douglas : %d, SDMM : %d \n', fro_GLA, fro_ADMM, fro_prop, fro_General, fro_Douglas, fro_SDMM);
+fprintf('    GLA : %d,  ADMM : %d,  Prop : %d, General : %d, Douglas : %d, SDMM : %d, PPXA : %d \n', fro_GLA, fro_ADMM, fro_prop, fro_General, fro_Douglas, fro_SDMM, fro_PPXA);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -152,6 +165,7 @@ signal_prop = ISTFT(spectrum_est_prop, windual, shiftsize, fftsize, Ls);
 signal_General = ISTFT(spectrum_est_General, windual, shiftsize, fftsize, Ls);
 signal_Douglas = ISTFT(spectrum_est_Douglas, windual, shiftsize, fftsize, Ls);
 signal_SDMM = ISTFT(spectrum_est_Douglas, windual, shiftsize, fftsize, Ls);
+signal_PPXA = ISTFT(spectrum_est_PPXA, windual, shiftsize, fftsize, Ls);
 
 % フォルダ作成
 [status, msg, msgID] = mkdir(sprintf('%s/signal_rho_%.2f', outputDir, rho));
@@ -163,6 +177,7 @@ audiowrite(sprintf('%s/signal_rho_%.2f/signal_prop_rho=%.2f.wav', outputDir, rho
 audiowrite(sprintf('%s/signal_rho_%.2f/signal_general_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_General), freq);
 audiowrite(sprintf('%s/signal_rho_%.2f/signal_Douglas_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_Douglas), freq);
 audiowrite(sprintf('%s/signal_rho_%.2f/signal_SDMM_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_SDMM), freq);
+audiowrite(sprintf('%s/signal_rho_%.2f/signal_PPXA_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_PPXA), freq);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -171,11 +186,11 @@ audiowrite(sprintf('%s/signal_rho_%.2f/signal_SDMM_rho=%.2f.wav', outputDir, rho
 
 %edit( sprintf('%s/result.xlsx', outputDir) );
 
-A = {rho, err_GLA, err_ADMM, err_prop, err_General, err_Douglas, err_SDMM, min_alpha_general, min_alpha_Douglas, min_alpha_SDMM};
+A = {rho, err_GLA, err_ADMM, err_prop, err_General, err_Douglas, err_SDMM, err_PPXA, min_alpha_general, min_alpha_Douglas, min_alpha_SDMM, min_alpha_PPXA};
 xlRange = sprintf('B%d', sell_angle);
 xlswrite(sprintf('%s/result.xlsx', outputDir), A, 1, xlRange);
 
-A = {rho, fro_GLA, fro_ADMM, fro_prop, fro_General, fro_Douglas, fro_SDMM, min_alpha_general, min_alpha_Douglas, min_alpha_SDMM};
+A = {rho, fro_GLA, fro_ADMM, fro_prop, fro_General, fro_Douglas, fro_SDMM, fro_PPXA, min_alpha_general, min_alpha_Douglas, min_alpha_SDMM, min_alpha_PPXA};
 xlRange = sprintf('B%d', sell_spe);
 xlswrite(sprintf('%s/result.xlsx', outputDir), A, 1, xlRange);
 
