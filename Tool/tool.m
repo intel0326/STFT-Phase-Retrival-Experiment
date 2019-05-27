@@ -193,14 +193,15 @@ classdef tool
             %
             
             
-            % 100.1 + 100.1i の複素数を用意し，スペクトル距離最小となるスペクトルを得る
-            temp_comp = complex(double(100.1), double(100.1));
+            % 1.e1000(無限) + 1.e1000i(無限) の複素数を用意し，スペクトル距離最小となるスペクトルを得る
+            temp_comp = complex(double(1.e1000), double(1.e1000));
             min_x = repmat(temp_comp, freq, frames);
-            
+            min_err_x = norm(spectrum_corr - spectrum_corr, 'fro');
+            min_alpha = 0.0;
             
             % alphaの更新
             %for alpha = 0.05:0.05:0.95
-            for alpha = [0.2, 0.4, 0.5, 0.6, 0.8]
+            for alpha = [0.1, 0.15, 0.2, 0.4, 20, 80, 100]
                 
                 % alphaの更新回数の印字
                 %fprintf('    alpha : %d \n', alpha);
@@ -277,14 +278,15 @@ classdef tool
             %   spectrum: frequency-domain (fftSize/2+1 x frames)
             %
                 
-            % 100.1 + 100.1i の複素数を用意
-            %  min_x = 0 : alpha更新に伴ってスペクトル距離最小となるスペクトルを得る
-            temp_comp = complex(double(100.1), double(100.1));
-            min_x = repmat(temp_comp, freq, frames);         
+            % 1.e1000(無限) + 1.e1000i(無限) の複素数を用意し，スペクトル距離最小となるスペクトルを得る
+            temp_comp = complex(double(1.e1000), double(1.e1000));
+            min_x = repmat(temp_comp, freq, frames);
+            min_err_x = norm(spectrum_corr - spectrum_corr, 'fro');
+            min_alpha = 0.0;
             
             % alphaの更新
             %for alpha = 0.05:0.05:0.95
-            for alpha = [0.2, 0.4, 0.5, 0.6, 0.8]
+            for alpha = [0.1, 0.15, 0.2, 0.4, 20, 80, 100]
 
                 % 初期値
                 %       x = amp_corr .* exp(1i * phase_temp) : 所望の振幅とランダムな位相によるスペクトル
@@ -351,14 +353,15 @@ classdef tool
             %   spectrum: frequency-domain (fftSize/2+1 x frames)
             %
                 
-            % 100.1 + 100.1i の複素数を用意
-            %  min_x = 0 : alpha更新に伴ってスペクトル距離最小となるスペクトルを得る
-            temp_comp = complex(double(100.1), double(100.1));
-            min_x = repmat(temp_comp, freq, frames);         
+            % 1.e1000(無限) + 1.e1000i(無限) の複素数を用意し，スペクトル距離最小となるスペクトルを得る
+            temp_comp = complex(double(1.e1000), double(1.e1000));
+            min_x = repmat(temp_comp, freq, frames);
+            min_err_x = norm(spectrum_corr - spectrum_corr, 'fro');
+            min_alpha = 0.0;
             
             % alphaの更新
             %for alpha = 0.05:0.05:0.95
-            for alpha = [0.2, 0.4, 0.5, 0.6, 0.8]
+            for alpha = [0.1, 0.15, 0.2, 0.4, 20, 80, 100]
 
                 % 初期値
                 %       x = amp_corr .* exp(1i * phase_temp) : 所望の振幅とランダムな位相によるスペクトル
@@ -436,10 +439,11 @@ classdef tool
             %   spectrum: frequency-domain (fftSize/2+1 x frames)
             %
                 
-            % 100.1 + 100.1i の複素数を用意
-            %  min_x = 0 : alpha更新に伴ってスペクトル距離最小となるスペクトルを得る
-            temp_comp = complex(double(100.1), double(100.1));
+            % 1.e1000(無限) + 1.e1000i(無限) の複素数を用意し，スペクトル距離最小となるスペクトルを得る
+            temp_comp = complex(double(1.e1000), double(1.e1000));
             min_x = repmat(temp_comp, freq, frames);
+            min_err_x = norm(spectrum_corr - spectrum_corr, 'fro');
+            min_alpha = 0.0;
             
             % 重みωを決定
             w1 = 1/2;
@@ -447,7 +451,7 @@ classdef tool
             
             % alphaの更新
             %for alpha = 0.05:0.05:0.95
-            for alpha = [0.2, 0.4, 0.5, 0.6, 0.8]
+            for alpha = [0.1, 0.15, 0.2, 0.4, 20, 80, 100]
 
                 % 初期値
                 %       x = amp_corr .* exp(1i * phase_temp) : 所望の振幅とランダムな位相によるスペクトル
