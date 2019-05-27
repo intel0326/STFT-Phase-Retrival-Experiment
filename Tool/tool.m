@@ -582,6 +582,19 @@ classdef tool
             
         end
 
+        function OutputMethod(spectrum, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, name)
+            %
+            % Corded by R.Nakatsu (is0269rx@ed.ritsumei.ac.jp) on 27 May. 2019.
+            %
+            
+            % 振幅を正規化する関数
+            Normalize = @(x) x/max(abs(x));
+            % スペクトルを時間信号に変換
+            signal = ISTFT(spectrum, windual, shiftsize, fftsize, Ls);
+            % 音源をwave形式で出力
+            audiowrite(sprintf('%s/signal_rho_%.2f/signal_%s_rho=%.2f.wav', outputDir, rho, name, rho), Normalize(signal), freq);
+        
+        end
         
     end
 end

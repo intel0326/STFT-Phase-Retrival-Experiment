@@ -171,39 +171,23 @@ fprintf('    GLA : %d,  ADMM : %d,  Prop : %d, Prop_batch : %d, General : %d, Do
 
 % 出力することを印字
 fprintf('Output :  Sound Source \n');
-% Normalize
-Normalize = @(x) x/max(abs(x));
-% ISTFT，時間軸に
-signal_corr = ISTFT(spectrum, windual, shiftsize, fftsize, Ls);
-signal_GLA = ISTFT(spectrum_est_GLA, windual, shiftsize, fftsize, Ls);
-signal_ADMM = ISTFT(spectrum_est_ADMM, windual, shiftsize, fftsize, Ls);
-signal_prop = ISTFT(spectrum_est_prop, windual, shiftsize, fftsize, Ls);
-signal_Prop_batch = ISTFT(spectrum_est_Prop_batch, windual, shiftsize, fftsize, Ls);
-signal_General = ISTFT(spectrum_est_General, windual, shiftsize, fftsize, Ls);
-signal_Douglas = ISTFT(spectrum_est_Douglas, windual, shiftsize, fftsize, Ls);
-signal_SDMM = ISTFT(spectrum_est_Douglas, windual, shiftsize, fftsize, Ls);
-signal_PPXA = ISTFT(spectrum_est_PPXA, windual, shiftsize, fftsize, Ls);
-
 
 % フォルダ作成
 [status, msg, msgID] = mkdir(sprintf('%s/signal_rho_%.2f', outputDir, rho));
-% 音源の出力
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_correct_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_corr), freq);
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_GLA_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_GLA), freq);
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_ADMM_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_ADMM), freq);
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_prop_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_prop), freq);
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_Prop_batch_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_Prop_batch), freq);
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_general_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_General), freq);
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_Douglas_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_Douglas), freq);
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_SDMM_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_SDMM), freq);
-audiowrite(sprintf('%s/signal_rho_%.2f/signal_PPXA_rho=%.2f.wav', outputDir, rho, rho), Normalize(signal_PPXA), freq);
+
+ins_tool.OutputMethod(spectrum, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'correct');
+ins_tool.OutputMethod(spectrum_est_GLA, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'GLA');
+ins_tool.OutputMethod(spectrum_est_ADMM, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'ADMM');
+ins_tool.OutputMethod(spectrum_est_prop, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'prop');
+ins_tool.OutputMethod(spectrum_est_Prop_batch, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'Prop_batch');
+ins_tool.OutputMethod(spectrum_est_General, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'General');
+ins_tool.OutputMethod(spectrum_est_Douglas, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'Douglas');
+ins_tool.OutputMethod(spectrum_est_PPXA, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'PPXA');
 
 
 %%%%%%%%%%%%%%%%%%%%
 % エクセルシートへの出力
 %%%%%%%%%%%%%%%%%%%%
-
-%edit( sprintf('%s/result.xlsx', outputDir) );
 
 A = {rho, err_GLA, err_ADMM, err_prop, err_Prop_batch, err_General, err_Douglas, err_SDMM, err_PPXA, min_alpha_general, min_alpha_Douglas, min_alpha_SDMM, min_alpha_PPXA};
 xlRange = sprintf('B%d', sell_angle);
