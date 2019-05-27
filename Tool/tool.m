@@ -152,9 +152,6 @@ classdef tool
             
             for i = 1:iteration
                 
-                % イテレーション回数の印字
-                %fprintf('    Iteration : %d \n', i);
-                
                 % xの更新
                 %   STFT( ISTFT() )をおこなう
                 S1 = ISTFT(z-u, windual, shiftsize, fftsize, Ls);
@@ -166,6 +163,74 @@ classdef tool
                 
                 % ラグランジュ未定乗数uの更新
                 u = u + x - z;
+                
+            end
+            
+            spectrum = x;
+            
+        end
+
+        function spectrum = Prop_batch(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, freq, frames, Ls, signal_len)
+            %
+            % Corded by R.Nakatsu (is0269rx@ed.ritsumei.ac.jp) on 27 May. 2019.
+            %
+            % [inputs]
+            %   amp_corr: correct amplitude ( FrequencyBin * Frames)
+            %   rho: ADMM Parameter ( ρ = 0.1, 0.2, 10, 100)
+            %   fftsize: FFT length (=8192)
+            %   shiftsize: frame shift (default: fftSize/2)
+            %   window: window function used in STFT (fftSize x 1) or choose used
+            %   iteration: iteration number
+            %   phase_temp: Random phase used as initial value
+            %   freq: fft length/2 (8192/2)
+            %
+            % [outputs]
+            %   spectrum: frequency-domain (fftSize/2+1 x frames)
+            %
+            
+            %%%%%%%%%%%%%%%%%%%%
+            % GLA + ADMM + prop + バッチ処理
+            %%%%%%%%%%%%%%%%%%%%
+            
+            % 初期値
+            %       x = amp_corr .* exp(1i * phase_temp) : 所望の振幅とランダムな位相によるスペクトル
+            %       z =  x: ADMMで解く最適化問題に落とし込むため，新たに変数zを用意
+            %       u = 0 : ラグランジュ未定乗数
+            x = amp_corr .* exp(1i * phase_temp);
+            z = x;
+            u = zeros(freq, frames);
+            
+            % 今回の音源では，freq*frames = 322164点．
+            % したがってバッチサイズを約数のb=26847にする．
+            % さらに，バッチサイズが26847であるため，イテレーションは 322164/26847=12 となる
+            %freq*frames
+            b = 26847;
+            batch_iteration = ( freq*frames ) / b;
+            
+            for i = 1:iteration
+            
+                batch = randperm(freq*frames);
+                
+                for k = 1 : batch_iteration
+                    
+                    % xの更新
+                    %   STFT( ISTFT() )をおこなう
+                    S1 = ISTFT(z-u, windual, shiftsize, fftsize, Ls);
+                    x = STFT(S1, win, shiftsize, fftsize, Ls, signal_len);
+                    
+                    % zを更新
+                    %   zに一度x+uを代入し，バッチ処理するインデックスのみを後ほど取り出す
+                    z = x + u;
+                    %   ある行列からバッチ処理する要素のインデックスをランダムに抽出したbatchベクトルから，
+                    %   ループ毎にバッチサイズb分インデックスを取得
+                    Extract = batch( b*(k-1)+1 : b*k );
+                    %   アダマール積に注意しながらzを更新
+                    z( Extract ) = ( ( rho*amp_corr( Extract ) + abs( z(Extract) ) ) / (1 + rho) ) .* exp( 1i * angle( z(Extract) ) );
+                    
+                    % ラグランジュ未定乗数uの更新
+                    u = u + x - z;
+                    
+                end
                 
             end
             
