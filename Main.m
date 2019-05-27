@@ -36,7 +36,7 @@ fprintf('**********Experiment clear amp**********\n');
 
 % admm‚Ìƒpƒ‰ƒ[ƒ^ƒÏ ( ƒÏ = 0.1, 0.2, 10, 100)
 %for rho = 0.1:0.1:1.0
-for rho = [0.001, 0.01, 0.1, 10, 100, 1000]
+for rho = [0.001, 0.01, 0.1]
 
     fprintf('\n');
     fprintf('rho = %d \n', rho);

@@ -201,8 +201,9 @@ classdef tool
             
             % alphaの更新
             %for alpha = 0.05:0.05:0.95
-            for alpha = [0.1, 0.15, 0.2, 0.4, 0.8]
-                
+            %for alpha = [0.1, 0.15, 0.2, 0.4, 0.8]
+            for alpha = [0.05, 0.07, 0.1, 0.12, 0.15, 0.2]
+            
                 % alphaの更新回数の印字
                 %fprintf('    alpha : %d \n', alpha);
             
@@ -286,7 +287,8 @@ classdef tool
             
             % alphaの更新
             %for alpha = 0.05:0.05:0.95
-            for alpha = [0.1, 0.15, 0.2, 0.4, 0.8]
+            %for alpha = [0.1, 0.15, 0.2, 0.4, 0.8]
+            for alpha = [0.05, 0.07, 0.1, 0.12, 0.15, 0.2]
 
                 % 初期値
                 %       x = amp_corr .* exp(1i * phase_temp) : 所望の振幅とランダムな位相によるスペクトル
@@ -361,7 +363,8 @@ classdef tool
             
             % alphaの更新
             %for alpha = 0.05:0.05:0.95
-            for alpha = [0.1, 0.15, 0.2, 0.4, 0.8]
+            %for alpha = [0.1, 0.15, 0.2, 0.4, 0.8]
+            for alpha = [0.05, 0.07, 0.1, 0.12, 0.15, 0.2]
 
                 % 初期値
                 %       x = amp_corr .* exp(1i * phase_temp) : 所望の振幅とランダムな位相によるスペクトル
@@ -451,7 +454,8 @@ classdef tool
             
             % alphaの更新
             %for alpha = 0.05:0.05:0.95
-            for alpha = [0.1, 0.15, 0.2, 0.4, 0.8]
+            %for alpha = [0.1, 0.15, 0.2, 0.4, 0.8]
+            for alpha = [0.05, 0.07, 0.1, 0.12, 0.15, 0.2]
 
                 % 初期値
                 %       x = amp_corr .* exp(1i * phase_temp) : 所望の振幅とランダムな位相によるスペクトル
