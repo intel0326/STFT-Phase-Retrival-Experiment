@@ -581,6 +581,22 @@ classdef tool
             fprintf('  min distance : %d ,   min alpha : %d \n', min_err_x, min_alpha);
             
         end
+        
+        function [err, fro] = evaluation(spectrum, spectrum_amp1_corr, amp_corr, spectrum_est)
+            %
+            % Corded by R.Nakatsu (is0269rx@ed.ritsumei.ac.jp) on 28 May. 2019.
+            %
+            
+            % 推定した位相を算出
+            phase_est= angle(spectrum_est);
+            % 振幅1かつ推定した位相のスペクトルを算出
+            spectrum_amp1_est = ones( size(amp_corr) ) .* exp( 1i * phase_est );
+            % 位相差を算出し，評価
+            err = immse(spectrum_amp1_corr, spectrum_amp1_est);
+            % スペクトル差を算出し，評価
+            fro = norm(spectrum - spectrum_est,'fro');
+            
+        end
 
         function OutputMethod(spectrum, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, name)
             %

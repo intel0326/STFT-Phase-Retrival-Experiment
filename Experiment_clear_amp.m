@@ -116,51 +116,29 @@ phase_est_PPXA= angle(spectrum_est_PPXA);
 % •]‰¿
 %%%%%%%%%%%%%%%%%%%%
 
-% “ñæ•½‹ÏŒë·‚É‚æ‚é•]‰¿‚Ìˆóš
 fprintf('\n');
-fprintf('Result :  Root Mean Square Error \n');
 
 % Š–]‚ÌˆÊ‘Š‚ÆCŠeè–@‚ÉŠî‚Ã‚«„’è‚µ‚½ˆÊ‘ŠŠÔ‚ÅU•1‚Ì•¡‘f”‚ğ‰¼’èC“ñæ•½‹ÏŒë·
 %      Š–]‚ÌˆÊ‘Š‚ÆU•1‚É‚æ‚è•¡‘f”‚ğ‰¼’èi³‰ğƒXƒyƒNƒgƒ‹j
 spectrum_amp1_corr = ones( size(amp_corr) ) .* exp( 1i * phase_corr );
 
-%      Šeè–@‚ÉŠî‚Ã‚«„’è‚µ‚½ˆÊ‘Š‚ÆU•1‚É‚æ‚è•¡‘f”‚ğ‰¼’è
-spectrum_amp1_GLA = ones( size(amp_corr) ) .* exp( 1i * phase_est_GLA );
-spectrum_amp1_ADMM = ones( size(amp_corr) ) .* exp( 1i * phase_est_ADMM );
-spectrum_amp1_prop = ones( size(amp_corr) ) .* exp( 1i * phase_est_prop );
-spectrum_amp1_Prop_batch = ones( size(amp_corr) ) .* exp( 1i * phase_est_Prop_batch );
-spectrum_amp1_General = ones( size(amp_corr) ) .* exp( 1i * phase_est_General );
-spectrum_amp1_Douglas = ones( size(amp_corr) ) .* exp( 1i * phase_est_Douglas );
-spectrum_amp1_SDMM = ones( size(amp_corr) ) .* exp( 1i * phase_est_SDMM );
-spectrum_amp1_PPXA = ones( size(amp_corr) ) .* exp( 1i * phase_est_PPXA );
-
-%      “ñæ•½‹ÏŒë·
-err_GLA = immse(spectrum_amp1_corr, spectrum_amp1_GLA);
-err_ADMM = immse(spectrum_amp1_corr, spectrum_amp1_ADMM);
-err_prop = immse(spectrum_amp1_corr, spectrum_amp1_prop);
-err_Prop_batch = immse(spectrum_amp1_corr, spectrum_amp1_Prop_batch);
-err_General = immse(spectrum_amp1_corr, spectrum_amp1_General);
-err_Douglas = immse(spectrum_amp1_corr, spectrum_amp1_Douglas);
-err_SDMM= immse(spectrum_amp1_corr, spectrum_amp1_SDMM);
-err_PPXA= immse(spectrum_amp1_corr, spectrum_amp1_PPXA);
+% ˆÊ‘Š·‚ÆƒXƒyƒNƒgƒ‹·‚ğZo‚·‚éŠÖ”‚ğŒÄ‚Ño‚µ
+[err_GLA, fro_GLA] = ins_tool.evaluation(spectrum, spectrum_amp1_corr, amp_corr, spectrum_est_GLA);
+[err_ADMM, fro_ADMM] = ins_tool.evaluation(spectrum, spectrum_amp1_corr, amp_corr, spectrum_est_ADMM);
+[err_prop, fro_prop] = ins_tool.evaluation(spectrum, spectrum_amp1_corr, amp_corr, spectrum_est_prop);
+[err_Prop_batch, fro_Prop_batch] = ins_tool.evaluation(spectrum, spectrum_amp1_corr, amp_corr, spectrum_est_Prop_batch);
+[err_General, fro_General ] = ins_tool.evaluation(spectrum, spectrum_amp1_corr, amp_corr, spectrum_est_General);
+[err_Douglas, fro_Douglas] = ins_tool.evaluation(spectrum, spectrum_amp1_corr, amp_corr, spectrum_est_Douglas);
+[err_SDMM, fro_SDMM] = ins_tool.evaluation(spectrum, spectrum_amp1_corr, amp_corr, spectrum_est_SDMM);
+[err_PPXA, fro_PPXA] = ins_tool.evaluation(spectrum, spectrum_amp1_corr, amp_corr, spectrum_est_PPXA);
 
 
-%      “ñæ•½‹ÏŒë·‚ÌŒ‹‰Ê‚ğˆóš
+% “ñæ•½‹ÏŒë·‚É‚æ‚Á‚Ä•]‰¿
+fprintf('Result :  Mean Square Error \n');
+% Œ‹‰Ê‚ğˆóš
 fprintf('    GLA : %d,  ADMM : %d,  Prop : %d, Prop_batch : %d, General : %d, Douglas : %d, SDMM : %d, PPXA : %d \n', err_GLA, err_ADMM, err_prop, err_Prop_batch, err_General, err_Douglas, err_SDMM, err_PPXA);
-
-
 % —‘z“I‚ÈU•‚Æ„’è‚µ‚½ˆÊ‘Š‚Ì•¡‘f”‚Å•½‹Ï‚É‚æ‚Á‚Ä•]‰¿
 fprintf('Result :  frobenius norm \n');
-
-fro_GLA = norm(spectrum - spectrum_est_GLA,'fro');
-fro_ADMM = norm(spectrum - spectrum_est_ADMM,'fro');
-fro_prop = norm(spectrum - spectrum_est_prop,'fro');
-fro_Prop_batch = norm(spectrum - spectrum_est_Prop_batch,'fro');
-fro_General = norm(spectrum - spectrum_est_General,'fro');
-fro_Douglas = norm(spectrum - spectrum_est_Douglas,'fro');
-fro_SDMM = norm(spectrum - spectrum_est_SDMM,'fro');
-fro_PPXA = norm(spectrum - spectrum_est_PPXA,'fro');
-
 % Œ‹‰Ê‚ğˆóš
 fprintf('    GLA : %d,  ADMM : %d,  Prop : %d, Prop_batch : %d, General : %d, Douglas : %d, SDMM : %d, PPXA : %d \n', fro_GLA, fro_ADMM, fro_prop, fro_Prop_batch, fro_General, fro_Douglas, fro_SDMM, fro_PPXA);
 
