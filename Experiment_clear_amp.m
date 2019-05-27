@@ -26,8 +26,6 @@
 fprintf('Start GLA \n');
 % 振幅から位相を推定するアルゴリズム
 spectrum_est_GLA = ins_tool.GLA(amp_corr, fftsize, shiftsize, win, windual, iteration, phase_temp, Ls, signal_len);
-% 位相を取得
-phase_est_GLA = angle(spectrum_est_GLA);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -38,8 +36,6 @@ phase_est_GLA = angle(spectrum_est_GLA);
 fprintf('Start GLA + ADMM \n');
 % 振幅から位相を推定するアルゴリズム
 spectrum_est_ADMM = ins_tool.GLA_ADMM(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, Ls, signal_len);
-% 位相を取得
-phase_est_ADMM = angle(spectrum_est_ADMM);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -50,8 +46,6 @@ phase_est_ADMM = angle(spectrum_est_ADMM);
 fprintf('Start GLA + ADMM + prop \n');
 % 振幅から位相を推定するアルゴリズム
 spectrum_est_prop = ins_tool.Prop(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, Ls, signal_len);
-% 位相を取得
-phase_est_prop = angle(spectrum_est_prop);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -62,8 +56,6 @@ phase_est_prop = angle(spectrum_est_prop);
 fprintf('Start GLA + ADMM + バッチ処理によるProp \n');
 % 振幅から位相を推定するアルゴリズム
 spectrum_est_Prop_batch = ins_tool.Prop_batch(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, Ls, signal_len);
-% 位相を取得
-phase_est_Prop_batch = angle(spectrum_est_Prop_batch);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -74,8 +66,6 @@ phase_est_Prop_batch = angle(spectrum_est_Prop_batch);
 fprintf('Start 一般化ADMM \n');
 % 振幅から位相を推定するアルゴリズム
 [spectrum_est_General, min_alpha_general] = ins_tool.General(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, Ls, signal_len);
-% 位相を取得
-phase_est_General = angle(spectrum_est_General);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -86,8 +76,6 @@ phase_est_General = angle(spectrum_est_General);
 fprintf('Start Douglas-Rachford Splitting Algorithm \n');
 % 振幅から位相を推定するアルゴリズム
 [spectrum_est_Douglas, min_alpha_Douglas] = ins_tool.DouglasRachfordSplitting(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, Ls, signal_len, gamma);
-% 位相を取得
-phase_est_Douglas= angle(spectrum_est_Douglas);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -97,8 +85,6 @@ phase_est_Douglas= angle(spectrum_est_Douglas);
 % スタートの印字
 fprintf('Start SDMM \n');
 [spectrum_est_SDMM, min_alpha_SDMM] = ins_tool.SDMM(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, Ls, signal_len);
-% 位相を取得
-phase_est_SDMM= angle(spectrum_est_SDMM);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -108,8 +94,6 @@ phase_est_SDMM= angle(spectrum_est_SDMM);
 % スタートの印字
 fprintf('Start PPXA \n');
 [spectrum_est_PPXA, min_alpha_PPXA] = ins_tool.PPXA(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, Ls, signal_len, gamma);
-% 位相を取得
-phase_est_PPXA= angle(spectrum_est_PPXA);
 
 
 %%%%%%%%%%%%%%%%%%%%
