@@ -528,8 +528,8 @@ classdef tool
                 x = amp_corr .* exp(1i * phase_temp);
                 y1 = x;
                 y2 = x;
-                p1 = zeros(freq, frames);
-                p2 = zeros(freq, frames);
+                %p1 = zeros(freq, frames);
+                %p2 = zeros(freq, frames);
                 
                 %%%%%%%%%%%%%%%%%%%%
                 % APXX
