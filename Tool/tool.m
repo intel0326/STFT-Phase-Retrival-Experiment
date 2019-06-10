@@ -727,7 +727,7 @@ classdef tool
             
         end
 
-        function OutputMethod(spectrum, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, name)
+        function OutputMethod(spectrum, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, signal_len, name)
             %
             % Corded by R.Nakatsu (is0269rx@ed.ritsumei.ac.jp) on 27 May. 2019.
             %
