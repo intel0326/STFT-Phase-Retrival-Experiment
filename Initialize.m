@@ -26,7 +26,7 @@ filename = './Sound_source/mixture.wav';
 % 出力先
 outputDir = './Output';
 % Douglas-Rachford Splitting Algorithm のγの値
-gamma = 1.9;
+gamma = 1.0;
 % 振幅の発散を防ぐ重みweight の初期化
 Delta = 0.01;
 % エクセルシートの初期値

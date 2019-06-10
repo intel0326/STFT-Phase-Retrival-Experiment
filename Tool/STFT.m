@@ -30,6 +30,6 @@ idx = (1:winLen)' + (0:skip:Ls-winLen);
 size(idx);
 C = fft(sig(idx).*win);
 hWL = floor(winLen/2);
-%C = C(1:hWL+1,:); % 通常のSTFT
-C = C(1:hWL+1,:).*exp(-2i*pi*(mod((0:hWL)'*(0:size(C,2)-1)*skip,winLen)/winLen)); % 理論的に好ましいSTFT
+C = C(1:hWL+1,:); % 通常のSTFT
+%C = C(1:hWL+1,:).*exp(-2i*pi*(mod((0:hWL)'*(0:size(C,2)-1)*skip,winLen)/winLen)); % 理論的に好ましいSTFT
 end

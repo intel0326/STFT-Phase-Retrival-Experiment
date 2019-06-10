@@ -1,4 +1,4 @@
-function sigr = iSTFT(C,win,skip,winLen,Ls)
+function sigr = ISTFT(C,win,skip,winLen,Ls,signal_len)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %                             inverse STFT
@@ -9,6 +9,7 @@ function sigr = iSTFT(C,win,skip,winLen,Ls)
 % skip  : skipping samples (1 x 1)
 % winLen: window length (1 x 1)
 % Ls    : signal length (1 x 1)
+% signal_len : Original signal length (1 x 1)
 %
 % !! Attention !!
 % length(sig) = Ls = win + skip x N
@@ -22,9 +23,10 @@ function sigr = iSTFT(C,win,skip,winLen,Ls)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 hWL = floor(winLen/2);
-C = C.*exp(+2i*pi*(mod((0:hWL)'*(0:size(C,2)-1)*skip,winLen)/winLen)); % 通常のiSTFTならばここをコメントアウト
+%C = C.*exp(+2i*pi*(mod((0:hWL)'*(0:size(C,2)-1)*skip,winLen)/winLen)); % 通常のiSTFTならばここをコメントアウト
 sigr = ifft([C;zeros(size(C)-[2,0])],'symmetric').*win;
 idx = (1:winLen)' + (0:skip:Ls-winLen);
 idx2 = repmat(1:size(C,2),winLen,1);
 sigr = full(sum(sparse(idx(:),idx2(:),sigr(:)),2));
+sigr = sigr(winLen-skip+1:winLen-skip+signal_len); % 信号の両端の0を埋め部分を取り除く
 end

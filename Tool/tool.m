@@ -52,7 +52,7 @@ classdef tool
                 %fprintf('    Iteration : %d \n', i);
                 
                 % 位相を更新
-                S1 = ISTFT(x, windual, shiftsize, fftsize, Ls);
+                S1 = ISTFT(x, windual, shiftsize, fftsize, Ls, signal_len);
                 S2 = STFT(S1, win, shiftsize, fftsize, Ls, signal_len);
                 
                 % スペクトログラムの更新，ampは所望に変更，位相だけ保管
@@ -106,7 +106,7 @@ classdef tool
                 
                 % 新たな変数であるzを更新
                 %   下準備として STFT( ISTFT() )をおこなう
-                S1 = ISTFT(x+u, windual, shiftsize, fftsize, Ls);
+                S1 = ISTFT(x+u, windual, shiftsize, fftsize, Ls, signal_len);
                 S2 = STFT(S1, win, shiftsize, fftsize, Ls, signal_len);
                 %   zの更新
                 z = ( rho*S2 + x + u ) / (1 + rho);
@@ -154,7 +154,7 @@ classdef tool
                 
                 % xの更新
                 %   STFT( ISTFT() )をおこなう
-                S1 = ISTFT(z-u, windual, shiftsize, fftsize, Ls);
+                S1 = ISTFT(z-u, windual, shiftsize, fftsize, Ls, signal_len);
                 x = STFT(S1, win, shiftsize, fftsize, Ls, signal_len);
                 
                 % 新たな変数であるzを更新
@@ -215,7 +215,7 @@ classdef tool
                     
                     % xの更新
                     %   STFT( ISTFT() )をおこなう
-                    S1 = ISTFT(z-u, windual, shiftsize, fftsize, Ls);
+                    S1 = ISTFT(z-u, windual, shiftsize, fftsize, Ls, signal_len);
                     x = STFT(S1, win, shiftsize, fftsize, Ls, signal_len);
                     
                     % zを更新
@@ -274,7 +274,7 @@ classdef tool
                 
                 % xの更新
                 %   STFT( ISTFT() )をおこなう
-                S1 = ISTFT(z-u, windual, shiftsize, fftsize, Ls);
+                S1 = ISTFT(z-u, windual, shiftsize, fftsize, Ls, signal_len);
                 x = STFT(S1, win, shiftsize, fftsize, Ls, signal_len);
                 
                 % 新たな変数であるzを更新
@@ -340,7 +340,7 @@ classdef tool
                     
                     % xの更新
                     %   STFT( ISTFT() )をおこなう
-                    S1 = ISTFT(z-u, windual, shiftsize, fftsize, Ls);
+                    S1 = ISTFT(z-u, windual, shiftsize, fftsize, Ls, signal_len);
                     x = STFT(S1, win, shiftsize, fftsize, Ls, signal_len);
                     
                     % zを更新
@@ -422,7 +422,7 @@ classdef tool
                     
                     % 新たな変数であるzを更新
                     %   下準備として STFT( ISTFT() )をおこなう
-                    S1 = ISTFT(x+u, windual, shiftsize, fftsize, Ls);
+                    S1 = ISTFT(x+u, windual, shiftsize, fftsize, Ls, signal_len);
                     S2 = STFT(S1, win, shiftsize, fftsize, Ls, signal_len);
                     %   zの更新
                     z = ( alpha*(x + u) + rho*S2 ) / ( alpha + rho );
@@ -501,7 +501,7 @@ classdef tool
                     
                     % sを更新
                     %   下準備として STFT( ISTFT() )をおこなう
-                    S1 = ISTFT(2*x-s, windual, shiftsize, fftsize, Ls);
+                    S1 = ISTFT(2*x-s, windual, shiftsize, fftsize, Ls, signal_len);
                     S2 = STFT(S1, win, shiftsize, fftsize, Ls, signal_len);
                     %   sの更新
                     s = s + gamma * ( ( alpha*(2*x-s) + rho*S2 ) / ( alpha + rho ) - x );
@@ -584,7 +584,7 @@ classdef tool
                     
                     %y2を更新
                     %   下準備として STFT( ISTFT() )をおこなう
-                    S1 = ISTFT(x+z2, windual, shiftsize, fftsize, Ls);
+                    S1 = ISTFT(x+z2, windual, shiftsize, fftsize, Ls, signal_len);
                     S2 = STFT(S1, win, shiftsize, fftsize, Ls, signal_len);
                     %   スペクトログラムの値域集合への写像により位相を修正
                     y2 = ( alpha*(x+z2) + rho*S2 ) / ( alpha + rho );
@@ -672,7 +672,7 @@ classdef tool
 
                     % p2を更新
                     %   下準備として STFT( ISTFT() )をおこなう
-                    S1 = ISTFT(y2, windual, shiftsize, fftsize, Ls);
+                    S1 = ISTFT(y2, windual, shiftsize, fftsize, Ls, signal_len);
                     S2 = STFT(S1, win, shiftsize, fftsize, Ls, signal_len);
                     %   スペクトログラムの値域集合への写像により位相を修正
                     p2 = ( alpha*w2*(y2) + rho*S2 ) / ( alpha*w2 + rho );
@@ -735,7 +735,7 @@ classdef tool
             % 振幅を正規化する関数
             Normalize = @(x) x/max(abs(x));
             % スペクトルを時間信号に変換
-            signal = ISTFT(spectrum, windual, shiftsize, fftsize, Ls);
+            signal = ISTFT(spectrum, windual, shiftsize, fftsize, Ls, signal_len);
             % 音源をwave形式で出力
             audiowrite(sprintf('%s/signal_rho_%.2f/signal_%s_rho=%.2f.wav', outputDir, rho, name, rho), Normalize(signal), freq);
         
