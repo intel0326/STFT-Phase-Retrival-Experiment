@@ -12,7 +12,9 @@
 % 標本化周波数
 freq = 16000;
 % 音を何秒間使うか
-total_sec = 10;
+% 6/11 140-150秒を使う
+start_sec = 140;
+end_sec = 150;
 % 短時間フーリエ変換のフレームフレーム幅
 fftsize = 1024;
 % 短時間フーリエ変換のフレームシフト量
@@ -40,7 +42,7 @@ sell_spe = 16;
 
 % 1.ISTFTに利用する逆の窓を合成
 % 2.真の複素スペクトログラムを取得
-[windual, spectrum, Ls, signal_len] = ins_tool.AudioReadMethod(filename, total_sec, freq, fftsize, shiftsize, win);
+[windual, spectrum, Ls, signal_len] = ins_tool.AudioReadMethod(filename, start_sec, end_sec, freq, fftsize, shiftsize, win);
 
 % 所望の振幅と位相を取得
 amp_corr = abs(spectrum);

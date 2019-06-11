@@ -1,11 +1,11 @@
 classdef tool
     methods (Static)
-        function [windual, Spe, Ls, signal_len] = AudioReadMethod(filename, total_sec, freq, fftsize, shiftsize, win)
+        function [windual, Spe, Ls, signal_len] = AudioReadMethod(filename, start_sec, end_sec, freq, fftsize, shiftsize, win)
             %サンプリングレートのみ取得
             %いらない音源の部分は「~」で消しておく
             [~,fs] = audioread(filename);
             %読み込む長さを計算
-            samples = [1, total_sec*fs];
+            samples = [start_sec*fs, end_sec*fs];
             %音源取得
             [music, fs] = audioread(filename, samples);
             %ダウンサンプリング
@@ -200,11 +200,11 @@ classdef tool
             z = x;
             u = zeros(freq, frames);
             
-            % 今回の音源では，freq*frames = 322164点．
-            % したがってバッチサイズを約数のb=26847にする．
-            % さらに，バッチサイズが26847であるため，イテレーションは 322164/26847=12 となる
-            %freq*frames
-            b = 26847;
+            % 今回の音源では，freq*frames = 322677点．
+            % したがってバッチサイズを約数のb=999にする．
+            % さらに，バッチサイズが999であるため，イテレーションは 322677/999=323 となる
+            % 6/11 イテレーションを323になるように調整しないか
+            b = 999;
             batch_iteration = ( freq*frames ) / b;
             
             for i = 1:iteration
@@ -325,11 +325,12 @@ classdef tool
             u = zeros(freq, frames);
             w = ( amp_corr + Delta ).^-1;
             
-            % 今回の音源では，freq*frames = 322164点．
-            % したがってバッチサイズを約数のb=26847にする．
-            % さらに，バッチサイズが26847であるため，イテレーションは 322164/26847=12 となる
+            % 今回の音源では，freq*frames = 322677点．
+            % したがってバッチサイズを約数のb=999にする．
+            % さらに，バッチサイズが999であるため，イテレーションは 322677/999=323 となる
+            % 6/11 イテレーションを323になるように調整しないか
             %freq*frames
-            b = 26847;
+            b = 999;
             batch_iteration = ( freq*frames ) / b;
             
             for i = 1:iteration
