@@ -158,16 +158,16 @@ fprintf('Output :  Sound Source \n');
 % ÉtÉHÉãÉ_çÏê¨
 [status, msg, msgID] = mkdir(sprintf('%s/signal_rho_%.2f', outputDir, rho));
 
-ins_tool.OutputMethod(spectrum, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'correct');
-ins_tool.OutputMethod(spectrum_est_GLA, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'GLA');
-ins_tool.OutputMethod(spectrum_est_ADMM, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'ADMM');
-ins_tool.OutputMethod(spectrum_est_prop, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'prop');
-ins_tool.OutputMethod(spectrum_est_Prop_batch, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'Prop_batch');
-ins_tool.OutputMethod(spectrum_est_General, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'General');
-ins_tool.OutputMethod(spectrum_est_Douglas, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'Douglas');
-ins_tool.OutputMethod(spectrum_est_PPXA, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'PPXA');
-ins_tool.OutputMethod(spectrum_est_prop_weight, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'prop_weight');
-ins_tool.OutputMethod(spectrum_est_Prop_batch_weight, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, 'Prop_batch_weight');
+ins_tool.OutputMethod(spectrum, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, signal_len, 'correct');
+ins_tool.OutputMethod(spectrum_est_GLA, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, signal_len, 'GLA');
+ins_tool.OutputMethod(spectrum_est_ADMM, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, signal_len, 'ADMM');
+ins_tool.OutputMethod(spectrum_est_prop, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, signal_len, 'prop');
+ins_tool.OutputMethod(spectrum_est_Prop_batch, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, signal_len, 'Prop_batch');
+ins_tool.OutputMethod(spectrum_est_General, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, signal_len, 'General');
+ins_tool.OutputMethod(spectrum_est_Douglas, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, signal_len, 'Douglas');
+ins_tool.OutputMethod(spectrum_est_PPXA, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, signal_len, 'PPXA');
+ins_tool.OutputMethod(spectrum_est_prop_weight, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, signal_len, 'prop_weight');
+ins_tool.OutputMethod(spectrum_est_Prop_batch_weight, windual, shiftsize, fftsize, Ls, freq, rho, outputDir, signal_len, 'Prop_batch_weight');
 
 
 %%%%%%%%%%%%%%%%%%%%
