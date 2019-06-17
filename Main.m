@@ -24,6 +24,7 @@ close all;
 
 % パスを通す
 addpath ./Tool
+addpath ./OptimizeMethod
 % クラスの呼び出し
 ins_tool = tool();
 
@@ -36,8 +37,9 @@ fprintf('**********Experiment clear amp**********\n');
 
 % admmのパラメータρ ( ρ = 0.1, 0.2, 10, 100)
 %for rho = 0.1:0.1:1.0
-for rho = [0.001, 0.01, 0.1, 10, 100]
-
+%for rho = [0.001, 0.01, 0.1, 10, 100]
+for rho = [0.001, 0.01]
+    
     fprintf('\n');
     fprintf('rho = %d \n', rho);
     fprintf('\n');
