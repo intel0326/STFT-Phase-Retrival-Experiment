@@ -424,7 +424,6 @@ classdef tool
             
         end
         
-        
         function [spectrum, sound, min_amp_error, min_A_error, min_alpha] = General(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, freq, spectrum_corr, frames, signal_len, STFT_type, A_weight)
             %
             % Corded by R.Nakatsu (is0269rx@ed.ritsumei.ac.jp) on 13 May. 2019.

@@ -25,7 +25,8 @@
 % スタートの印字
 fprintf('Start GLA \n');
 % 振幅から位相を推定するアルゴリズム
-[GLA_spe, GLA_sound, GLA_amp_err, GLA_A_err] = ins_tool.GLA(amp_corr, fftsize, shiftsize, win, windual, iteration, phase_temp, signal_len, STFT_type, A_weight);
+%[GLA_spe, GLA_sound, GLA_amp_err, GLA_A_err] = ins_tool.GLA(amp_corr, fftsize, shiftsize, win, windual, iteration, phase_temp, signal_len, STFT_type, A_weight);
+[GLA_spe, GLA_sound, GLA_amp_err, GLA_A_err] = GLA(amp_corr, fftsize, shiftsize, win, windual, iteration, phase_temp, signal_len, STFT_type, A_weight);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -35,7 +36,8 @@ fprintf('Start GLA \n');
 % スタートの印字
 fprintf('Start GLA + ADMM \n');
 % 振幅から位相を推定するアルゴリズム
-[ADMM_spe, ADMM_sound, ADMM_amp_err, ADMM_A_err] = ins_tool.ADMM(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, signal_len, STFT_type, A_weight);
+%[ADMM_spe, ADMM_sound, ADMM_amp_err, ADMM_A_err] = ins_tool.ADMM(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, signal_len, STFT_type, A_weight);
+[ADMM_spe, ADMM_sound, ADMM_amp_err, ADMM_A_err] = ADMM(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, signal_len, STFT_type, A_weight);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -45,7 +47,8 @@ fprintf('Start GLA + ADMM \n');
 % スタートの印字
 fprintf('Start GLA + ADMM + prop \n');
 % 振幅から位相を推定するアルゴリズム
-[prop_spe, prop_sound, prop_amp_err, prop_A_err] = ins_tool.Prop(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, signal_len, STFT_type, A_weight);
+%[prop_spe, prop_sound, prop_amp_err, prop_A_err] = ins_tool.Prop(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, signal_len, STFT_type, A_weight);
+[prop_spe, prop_sound, prop_amp_err, prop_A_err] = Prop(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, signal_len, STFT_type, A_weight);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -55,7 +58,8 @@ fprintf('Start GLA + ADMM + prop \n');
 % スタートの印字
 fprintf('Start GLA + ADMM + バッチ処理によるProp \n');
 % 振幅から位相を推定するアルゴリズム
-[prop_batch_spe, prop_batch_sound, prop_batch_amp_err, prop_batch_A_err] = ins_tool.Prop_batch(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, signal_len, STFT_type, A_weight);
+%[prop_batch_spe, prop_batch_sound, prop_batch_amp_err, prop_batch_A_err] = ins_tool.Prop_batch(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, signal_len, STFT_type, A_weight);
+[prop_batch_spe, prop_batch_sound, prop_batch_amp_err, prop_batch_A_err] = Prop_batch(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, signal_len, STFT_type, A_weight);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -65,7 +69,8 @@ fprintf('Start GLA + ADMM + バッチ処理によるProp \n');
 % スタートの印字
 fprintf('Start GLA + ADMM + prop + 振幅weight \n');
 % 振幅から位相を推定するアルゴリズム
-[prop_weight_spe, prop_weight_sound, prop_weight_amp_err, prop_weight_A_err] = ins_tool.PropWeight(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, signal_len, Delta, STFT_type, A_weight);
+%[prop_weight_spe, prop_weight_sound, prop_weight_amp_err, prop_weight_A_err] = ins_tool.PropWeight(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, signal_len, Delta, STFT_type, A_weight);
+[prop_weight_spe, prop_weight_sound, prop_weight_amp_err, prop_weight_A_err] = PropWeight(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, signal_len, Delta, STFT_type, A_weight);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -75,7 +80,8 @@ fprintf('Start GLA + ADMM + prop + 振幅weight \n');
 % スタートの印字
 fprintf('Start GLA + ADMM + バッチ処理によるProp + 振幅weight \n');
 % 振幅から位相を推定するアルゴリズム
-[prop_batch_weight_spe, prop_batch_weight_sound, prop_batch_weight_amp_err, prop_batch_weight_A_err] = ins_tool.Prop_batch_weight(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, signal_len, Delta, STFT_type, A_weight);
+%[prop_batch_weight_spe, prop_batch_weight_sound, prop_batch_weight_amp_err, prop_batch_weight_A_err] = ins_tool.Prop_batch_weight(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, signal_len, Delta, STFT_type, A_weight);
+[prop_batch_weight_spe, prop_batch_weight_sound, prop_batch_weight_amp_err, prop_batch_weight_A_err] = Prop_batch_weight(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, signal_len, Delta, STFT_type, A_weight);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -85,7 +91,8 @@ fprintf('Start GLA + ADMM + バッチ処理によるProp + 振幅weight \n');
 % スタートの印字
 fprintf('Start 一般化ADMM \n');
 % 振幅から位相を推定するアルゴリズム
-[Gprop_spe, Gprop_sound, Gprop_amp_err, Gprop_A_err, min_alpha_Gprop] = ins_tool.General(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, signal_len, STFT_type, A_weight);
+%[Gprop_spe, Gprop_sound, Gprop_amp_err, Gprop_A_err, min_alpha_Gprop] = ins_tool.General(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, signal_len, STFT_type, A_weight);
+[Gprop_spe, Gprop_sound, Gprop_amp_err, Gprop_A_err, min_alpha_Gprop] = General(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, signal_len, STFT_type, A_weight);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -95,7 +102,8 @@ fprintf('Start 一般化ADMM \n');
 % スタートの印字
 fprintf('Start Douglas-Rachford Splitting Algorithm \n');
 % 振幅から位相を推定するアルゴリズム
-[Douglas_spe, Douglas_sound, Douglas_amp_err, Douglas_A_err, min_alpha_Douglas] = ins_tool.DouglasRachfordSplitting(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, signal_len, gamma, STFT_type, A_weight);
+%[Douglas_spe, Douglas_sound, Douglas_amp_err, Douglas_A_err, min_alpha_Douglas] = ins_tool.DouglasRachfordSplitting(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, signal_len, gamma, STFT_type, A_weight);
+[Douglas_spe, Douglas_sound, Douglas_amp_err, Douglas_A_err, min_alpha_Douglas] = DouglasRachfordSplitting(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, signal_len, gamma, STFT_type, A_weight);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -104,7 +112,8 @@ fprintf('Start Douglas-Rachford Splitting Algorithm \n');
 
 % スタートの印字
 fprintf('Start SDMM \n');
-[SDMM_spe, SDMM_sound, SDMM_amp_err, SDMM_A_err, min_alpha_SDMM] = ins_tool.SDMM(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, signal_len, STFT_type, A_weight);
+%[SDMM_spe, SDMM_sound, SDMM_amp_err, SDMM_A_err, min_alpha_SDMM] = ins_tool.SDMM(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, signal_len, STFT_type, A_weight);
+[SDMM_spe, SDMM_sound, SDMM_amp_err, SDMM_A_err, min_alpha_SDMM] = SDMM(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, signal_len, STFT_type, A_weight);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -113,7 +122,8 @@ fprintf('Start SDMM \n');
 
 % スタートの印字
 fprintf('Start PPXA \n');
-[PPXA_spe, PPXA_sound, PPXA_amp_err, PPXA_A_err, min_alpha_PPXA] = ins_tool.PPXA(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, signal_len, gamma, STFT_type, A_weight);
+%[PPXA_spe, PPXA_sound, PPXA_amp_err, PPXA_A_err, min_alpha_PPXA] = ins_tool.PPXA(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, signal_len, gamma, STFT_type, A_weight);
+[PPXA_spe, PPXA_sound, PPXA_amp_err, PPXA_A_err, min_alpha_PPXA] = PPXA(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, spectrum, frames, signal_len, gamma, STFT_type, A_weight);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -168,7 +178,7 @@ fprintf('    GLA : %d,  ADMM : %d,  Prop : %d, Prop_batch : %d, Prop_weight : %d
 %}
 
 % 振幅の誤差によって評価
-fprintf('Result : Amp Error \n');
+fprintf('Result : Error \n');
 
 ins_tool.OutputPrintingMethod('GLA', GLA_amp_err(end), GLA_A_err(end));
 ins_tool.OutputPrintingMethod('ADMM', ADMM_amp_err(end), ADMM_A_err(end));
