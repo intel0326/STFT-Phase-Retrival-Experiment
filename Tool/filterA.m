@@ -7,15 +7,11 @@
 
 function [xA,A] = filterA(x, fs)
 
-% A特性補正は、音圧レベルに周波数ごとに補正値を加え合わせます。
-% 周波数500Hz成分の音圧レベルが50dBであったとすると、
-% A特性音圧レベルでは、50-3.2=46.8dBとなります。
-%
 % function: xA = filterA(x, fs)
 % x - original signal in the time domain
 % fs - sampling frequency, Hz
 % xA - filtered signal in the time domain
-%
+
 % Note: The A-weighting filter's coefficients 
 % are acccording to IEC 61672-1:2002 standard 
 
@@ -27,7 +23,6 @@ NumUniquePts = ceil((xlen+1)/2);
 
 % FFT
 X = fft(x);
-size(X)
 % fft is symmetric, throw away the second half
 X = X(1:NumUniquePts);
 
@@ -45,7 +40,6 @@ f = f.^2;
 num = c1*(f.^2);
 den = (f+c2) .* sqrt((f+c3).*(f+c4)) .* (f+c1);
 A = 1.2589*num./den;
-size(A)
 % filtering in the frequency domain
 XA = X(:).*A(:);
 

@@ -12,28 +12,33 @@
 % 標本化周波数
 freq = 16000;
 % 音を何秒間使うか
-% 6/11 140-150秒を使う
-start_sec = 140;
-end_sec = 150;
+% 6/17 40-50秒を使う
+start_sec = 40;
+end_sec = 50;
 % 短時間フーリエ変換のフレームフレーム幅
 fftsize = 1024;
 % 短時間フーリエ変換のフレームシフト量
 shiftsize = 256;
 % ADMMのイテレーション回数を指定
-iteration = 1000;
+iteration = 1;
 % 窓の種類
 win = hann(fftsize,'periodic'); % ハニング窓
 % 対象音
-filename = './Sound_source/mixture.wav';
+%filename = './Sound_source/mixture.wav';
+filename = './Sound_source/01 Roundabout.mp3';
 % 出力先
 outputDir = './Output';
+% STFTのタイプ(矢田部さんの通常のやつ=1, 理想的なSTFT=2)
+STFT_type = 1;
+% A特性のフィルタを作成
+[~,A_weight] = filterA(ones(fftsize,1), freq);
 % Douglas-Rachford Splitting Algorithm のγの値
 gamma = 1.0;
 % 振幅の発散を防ぐ重みweight の初期化
 Delta = 0.01;
 % エクセルシートの初期値
 sell_angle = 3;
-sell_spe = 16;
+sell_spe = 18;
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -42,7 +47,7 @@ sell_spe = 16;
 
 % 1.ISTFTに利用する逆の窓を合成
 % 2.真の複素スペクトログラムを取得
-[windual, spectrum, Ls, signal_len] = ins_tool.AudioReadMethod(filename, start_sec, end_sec, freq, fftsize, shiftsize, win);
+[windual, spectrum, signal_len, music] = ins_tool.AudioReadMethod(filename, start_sec, end_sec, freq, fftsize, shiftsize, win, STFT_type);
 
 % 所望の振幅と位相を取得
 amp_corr = abs(spectrum);

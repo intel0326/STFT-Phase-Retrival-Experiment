@@ -44,13 +44,29 @@ for rho = [0.001, 0.01, 0.1, 10, 100]
         
     run('Experiment_clear_amp.m');
     save(sprintf('./Variable/result_rho_%.2f.mat', rho));
+    
 end
     
 %二つ目の実験を開始
 %fprintf('**********Experiment noise amp**********\n');
 %run('Experiment_noise_amp.m');
 
-% パスを消す
-rmpath ./Tool
+%音を聞くとき
+%sound(y, freq);
+%sound(true_sound, freq);
+%sound(GLA_sound, freq);
+%sound(ADMM_sound, freq);
+%sound(Prop_sound, freq);
+%sound(gADMM_sound, freq);
+
+%グラフ
+%{
+figure(200)
+plot(gADMM_A_error(100:end))
+legend('GLA','ADMM','Prop','PropGeneral');
+xlim([0 900]);
+%}
+
+%グラフのフォントサイズは13くらい
 
 
