@@ -3,7 +3,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-%   Corded by R.Nakatsu (is0269rx@ed.ritsumei.ac.jp) on 13 May. 2019.
+%   Corded by R.Nakatsu (dragonstar30210326@gmail.com) on 13 May. 2019.
 %
 %   音源から振幅を抽出．
 %   その振幅から位相を２つの手法(GLA, GLA+ADMM, GLA+ADMM+prop, 一般化ADMM)で推定し，比較する
@@ -20,6 +20,10 @@
 
 %%%%%%%%%%%%%%%%%%%%
 % GLA
+%
+% D. W. Gri?n and J. S. Lim, “Signal estimation from modi?ed short-time Fourier transform, ”
+% IEEE Trans. Acoust. Speech Signal Process (ICASSP), Vol. 32, No. 2, pp. 236?243, 1984.
+%
 %%%%%%%%%%%%%%%%%%%%
 
 % スタートの印字
@@ -30,7 +34,8 @@ fprintf('Start GLA \n');
 
 
 %%%%%%%%%%%%%%%%%%%%
-% ADMM （矢田部法）
+% ADMM （升山法）
+% https://ieeexplore.ieee.org/document/8552369
 %%%%%%%%%%%%%%%%%%%%
 
 % スタートの印字
@@ -41,7 +46,8 @@ fprintf('Start GLA + ADMM \n');
 
 
 %%%%%%%%%%%%%%%%%%%%
-% GLA + ADMM + prop
+% GLA + ADMM + 提案
+% ※良い結果とはならなかった
 %%%%%%%%%%%%%%%%%%%%
 
 % スタートの印字
@@ -52,7 +58,8 @@ fprintf('Start GLA + ADMM + prop \n');
 
 
 %%%%%%%%%%%%%%%%%%%%
-% GLA + ADMM + バッチ処理によるprop
+% GLA + ADMM + 提案 + バッチ処理
+% ※良い結果とはならなかった
 %%%%%%%%%%%%%%%%%%%%
 
 % スタートの印字
@@ -63,7 +70,8 @@ fprintf('Start GLA + ADMM + バッチ処理によるProp \n');
 
 
 %%%%%%%%%%%%%%%%%%%%
-% GLA + ADMM + prop + 振幅weight
+% GLA + ADMM + 提案 + 振幅に重み付け
+% ※良い結果とはならなかった
 %%%%%%%%%%%%%%%%%%%%
 
 % スタートの印字
@@ -74,11 +82,12 @@ fprintf('Start GLA + ADMM + prop + 振幅weight \n');
 
 
 %%%%%%%%%%%%%%%%%%%%
-% GLA + ADMM + バッチ処理によるprop + 振幅weight
+% GLA + ADMM + 提案 + バッチ処理 + 振幅に重み付け
+% ※良い結果とはならなかった
 %%%%%%%%%%%%%%%%%%%%
 
 % スタートの印字
-fprintf('Start GLA + ADMM + バッチ処理によるProp + 振幅weight \n');
+fprintf('Start GLA + ADMM + 提案 + バッチ処理 + 振幅weight \n');
 % 振幅から位相を推定するアルゴリズム
 %[prop_batch_weight_spe, prop_batch_weight_sound, prop_batch_weight_amp_err, prop_batch_weight_A_err] = ins_tool.Prop_batch_weight(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, signal_len, Delta, STFT_type, A_weight);
 [prop_batch_weight_spe, prop_batch_weight_sound, prop_batch_weight_amp_err, prop_batch_weight_A_err] = Prop_batch_weight(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, amp_FFTsize, frames, signal_len, Delta, STFT_type, A_weight);

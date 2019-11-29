@@ -1,6 +1,6 @@
  function [spectrum, sound, amp_error, A_error] = Prop_batch_weight(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, freq, frames, signal_len, Delta, STFT_type, A_weight)
             %
-            % Corded by R.Nakatsu (is0269rx@ed.ritsumei.ac.jp) on 4 June. 2019.
+            % Corded by R.Nakatsu (dragonstar30210326@gmail.com) on 4 June. 2019.
             %
             % [inputs]
             %   amp_corr: correct amplitude ( FrequencyBin * Frames)

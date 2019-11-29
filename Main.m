@@ -4,7 +4,7 @@ close all;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-%   Corded by R.Nakatsu (is0269rx@ed.ritsumei.ac.jp) on 13 May. 2019.
+%   Corded by R.Nakatsu (dragonstar30210326@gmail.com) on 13 May. 2019.
 %
 %   実験内容
 %        音源から振幅を抽出．
@@ -49,7 +49,7 @@ for rho = [0.001, 0.01]
     
 end
     
-%二つ目の実験を開始
+%ノイズありの振幅スペクトログラムに対する実験を開始
 %fprintf('**********Experiment noise amp**********\n');
 %run('Experiment_noise_amp.m');
 

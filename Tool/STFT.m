@@ -3,6 +3,10 @@ function C = STFT(sig,win,skip,winLen,flag)
 % 
 %                                  STFT
 %
+%   升山氏のSTFTプログラムを拝借，一部改編しております
+%   https://ieeexplore.ieee.org/document/8552369/algorithms#algorithms
+%
+%
 %%% -- Input --------------------------------------------------------------
 % sig   : signal (samples x 1)
 % win   : analysis window (winLen x 1)

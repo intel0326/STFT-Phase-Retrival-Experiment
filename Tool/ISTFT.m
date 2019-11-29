@@ -3,6 +3,10 @@ function sigr = ISTFT(C,windual,skip,winLen,signal_len,flag)
 %
 %                             inverse STFT
 %
+%   升山氏のSTFTプログラムを拝借，一部改編しております
+%   https://ieeexplore.ieee.org/document/8552369/algorithms#algorithms
+%
+%
 %%% -- Input --------------------------------------------------------------
 % C     : spectrograms (freq x time)
 % windual   : synthesis window (winLen x 1)

@@ -1,6 +1,6 @@
 function [spectrum, sound, min_amp_error, min_A_error, min_alpha] = PPXA(amp_corr, rho, fftsize, shiftsize, win, windual, iteration, phase_temp, freq, spectrum_corr, frames, signal_len, gamma, STFT_type, A_weight)
             %
-            % Corded by R.Nakatsu (is0269rx@ed.ritsumei.ac.jp) on 25 May. 2019.
+            % Corded by R.Nakatsu (dragonstar30210326@gmail.com) on 25 May. 2019.
             %
             % [inputs]
             %   amp_corr: correct amplitude ( FrequencyBin * Frames)

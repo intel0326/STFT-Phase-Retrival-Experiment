@@ -1,6 +1,6 @@
 function [spectrum, sound, amp_error, A_error] = GLA(amp_corr, fftsize, shiftsize, win, windual, iteration, phase_temp, signal_len, STFT_type, A_weight)
    %
-   % Corded by R.Nakatsu (is0269rx@ed.ritsumei.ac.jp) on 18 Apr. 2019.
+   % Corded by R.Nakatsu (dragonstar30210326@gmail.com) on 18 Apr. 2019.
    %
    % [inputs]
    %   amp_corr: correct amplitude ( FrequencyBin * Frames)

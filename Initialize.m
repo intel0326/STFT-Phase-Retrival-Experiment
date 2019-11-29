@@ -1,5 +1,8 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   Corded by R.Nakatsu (dragonstar30210326@gmail.com) on 29 Nov. 2019.
+%
 %   本コードの説明
 %       「Main_program.m」で使用する変数の初期値を設定
 %       変数の初期値の設定に伴い，「initialize.mat」を作成
